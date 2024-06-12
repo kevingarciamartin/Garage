@@ -19,7 +19,7 @@ namespace Garage
             do
             {
                 ConsoleUI.PrintMenu();
-                //GetCommand();
+
                 var keyPressed = ConsoleUI.GetKey();
 
                 switch (keyPressed)

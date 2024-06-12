@@ -29,7 +29,7 @@ namespace Garage
                     _garageHandler = new GarageHandler(garageCapacity);
                     break;
                 case ConsoleKey.D0:
-                    ConfirmApplicationExitCommand();
+                    ConfirmExitCommand();
                     break;
                 default:
                     ConsoleUI.WriteLine("Please enter a valid input.");
@@ -37,9 +37,9 @@ namespace Garage
             }
         }
 
-        private void ConfirmApplicationExitCommand()
+        private void ConfirmExitCommand()
         {
-            ConsoleUI.ConfirmApplicationExit();
+            ConsoleUI.ConfirmExit("application");
 
             var confirmationKeyPressed = ConsoleUI.GetKey();
 
