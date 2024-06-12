@@ -16,7 +16,7 @@ namespace Garage
             Console.Clear();
         }
 
-        internal static void ConfirmExit()
+        internal static void ConfirmApplicationExit()
         {
             WriteLine("Are you sure you want to exit the application?"
                 + "\n1. Yes."
