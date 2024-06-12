@@ -46,6 +46,7 @@ namespace Garage
             switch (confirmationKeyPressed)
             {
                 case ConsoleKey.D1:
+                    ConsoleUI.WriteLine("Application closed.");
                     Environment.Exit(0);
                     break;
                 case ConsoleKey.D0:
