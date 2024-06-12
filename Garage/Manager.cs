@@ -6,10 +6,17 @@ namespace Garage
     {
         internal void Run()
         {
-            Initialize();
+            bool applicationInProgress = true;
+
+            do
+            {
+                //PrintMenu
+
+                //GetCommand()
+            } while (applicationInProgress);
         }
 
-        private void Initialize()
+        internal void Initialize()
         {
             ConsoleUI ui = new();
             GarageHandler garageHandler = new();
