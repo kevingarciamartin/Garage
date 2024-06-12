@@ -26,6 +26,16 @@ namespace Garage
                 {
                     case ConsoleKey.D1:
                         break;
+                    case ConsoleKey.D2:
+                        break;
+                    case ConsoleKey.D3:
+                        break;
+                    case ConsoleKey.D4:
+                        break;
+                    case ConsoleKey.D5:
+                        break;
+                    case ConsoleKey.D6:
+                        break;
                     case ConsoleKey.D0:
                         inGarage = false;
                         break;
@@ -34,10 +44,6 @@ namespace Garage
                         break;
                 }
             } while (inGarage);
-        }
-
-        private void GetCommand()
-        {
         }
     }
 }
