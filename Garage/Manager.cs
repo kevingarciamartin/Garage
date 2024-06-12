@@ -6,20 +6,15 @@ namespace Garage
 {
     internal class Manager
     {
-        internal void Initialize()
-        {
-            GarageHandler garageHandler = new();
-        }
+        private GarageHandler _garageHandler = null!;
 
         internal void Run()
         {
-            bool applicationInProgress = true;
-
             do
             {
-                PrintMenu();
+                PrintMainMenu();
                 GetCommand();
-            } while (applicationInProgress);
+            } while (true);
         }
 
         private void GetCommand()
@@ -28,22 +23,13 @@ namespace Garage
 
             switch (keyPressed)
             {
+                case ConsoleKey.D1:
+                    var garageCapacity = ConsoleUI.AskForInt("What is the capacity of your garage?");
+
+                    _garageHandler = new GarageHandler(garageCapacity);
+                    break;
                 case ConsoleKey.D0:
-                    ConsoleUI.ConfirmExit();
-
-                    var confirmationKeyPressed = ConsoleUI.GetKey();
-
-                    switch (confirmationKeyPressed)
-                    {
-                        case ConsoleKey.D1:
-                            Environment.Exit(0);
-                            break;
-                        case ConsoleKey.D0:
-                            break;
-                        default:
-                            ConsoleUI.WriteLine("Please enter a valid input.");
-                            break;
-                    }
+                    ConfirmExitCommand();
                     break;
                 default:
                     ConsoleUI.WriteLine("Please enter a valid input.");
@@ -51,9 +37,28 @@ namespace Garage
             }
         }
 
-        private void PrintMenu()
+        private void ConfirmExitCommand()
         {
-            ConsoleUI.PrintMenu();
+            ConsoleUI.ConfirmExit();
+
+            var confirmationKeyPressed = ConsoleUI.GetKey();
+
+            switch (confirmationKeyPressed)
+            {
+                case ConsoleKey.D1:
+                    Environment.Exit(0);
+                    break;
+                case ConsoleKey.D0:
+                    break;
+                default:
+                    ConsoleUI.WriteLine("Please enter a valid input.");
+                    break;
+            }
+        }
+
+        private void PrintMainMenu()
+        {
+            ConsoleUI.PrintMainMenu();
         }
     }
 }
