@@ -1,4 +1,4 @@
-namespace Garage.Tests.Garage.Manager.Tests
+namespace Garage.Tests.Tests
 {
     public class ManagerTests
     {
