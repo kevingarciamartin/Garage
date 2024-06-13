@@ -1,14 +1,15 @@
-﻿
-
-namespace Garage
+﻿namespace Garage
 {
     internal class GarageHandler
     {
         public int GarageCapacity { get; }
 
+        public Garage Garage { get; set; }
+
         public GarageHandler(int garageCapacity)
         {
             GarageCapacity = garageCapacity;
+            Garage = new(GarageCapacity);
 
             PrintMenu();
         }
@@ -40,7 +41,7 @@ namespace Garage
                         inGarage = false;
                         break;
                     default:
-                        ConsoleUI.WriteLine("Please enter a valid input.");
+                        ConsoleUI.ErrorMessage("Please enter a valid input.");
                         break;
                 }
             } while (inGarage);

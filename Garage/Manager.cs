@@ -1,8 +1,4 @@
-﻿
-
-
-
-namespace Garage
+﻿namespace Garage
 {
     internal class Manager
     {
@@ -32,7 +28,7 @@ namespace Garage
                     ConfirmExitCommand();
                     break;
                 default:
-                    ConsoleUI.WriteLine("Please enter a valid input.");
+                    ConsoleUI.ErrorMessage("Please enter a valid input.");
                     break;
             }
         }
@@ -52,7 +48,7 @@ namespace Garage
                 case ConsoleKey.D0:
                     break;
                 default:
-                    ConsoleUI.WriteLine("Please enter a valid input.");
+                    ConsoleUI.ErrorMessage("Please enter a valid input.");
                     break;
             }
         }

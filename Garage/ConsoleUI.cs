@@ -1,12 +1,4 @@
-﻿
-
-
-
-
-
-
-
-namespace Garage
+﻿namespace Garage
 {
     internal class ConsoleUI
     {
@@ -49,6 +41,20 @@ namespace Garage
             Console.WriteLine(message);
             Console.WriteLine();
         }
+        
+        internal static void ErrorMessage(string message)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine(message);
+            Console.ResetColor();
+        }
+        
+        internal static void SuccessMessage(string message)
+        {
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine(message);
+            Console.ResetColor();
+        }
 
         internal static string AskForString(string prompt)
         {
@@ -59,14 +65,15 @@ namespace Garage
             {
                 Console.Write($"{prompt} ");
                 input = Console.ReadLine() ?? string.Empty;
-                Console.WriteLine();
 
                 if (string.IsNullOrWhiteSpace(input))
                 {
-                    WriteLine("You must enter a valid input");
+                    ErrorMessage("You must enter a valid input");
                 }
                 else
                     success = true;
+
+                Console.WriteLine();
 
             } while (!success);
 
@@ -80,12 +87,12 @@ namespace Garage
                 var input = AskForString(prompt);
 
                 if (!int.TryParse(input, out int result))
-                    WriteLine("You must enter a valid integer.");
+                    ErrorMessage("You must enter a valid integer.");
                 else
                     return result;
 
             } while (true);
         }
-        
+
     }
 }
