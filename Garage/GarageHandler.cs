@@ -4,13 +4,18 @@ namespace Garage
 {
     internal class GarageHandler
     {
-        private Garage<Vehicle> _garage;
-        private int _garageCapacity;
+        private List<Garage<Vehicle>> _garages;
 
-        public GarageHandler(int garageCapacity)
+        public GarageHandler()
         {
-            _garageCapacity = garageCapacity;
-            _garage = new(_garageCapacity);
+            _garages = new();
+        }
+
+        public void Add(int garageCapacity)
+        {
+            ArgumentNullException.ThrowIfNull(garageCapacity, "garageCapacity");
+
+            _garages.Add(new Garage<Vehicle>(garageCapacity));
         }
     }
 }

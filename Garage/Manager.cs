@@ -2,7 +2,7 @@
 {
     internal class Manager
     {
-        private GarageHandler _garageHandler = null!;
+        private GarageHandler _garageHandler = new();
 
         internal void Run()
         {
@@ -22,10 +22,11 @@
             {
                 case ConsoleKey.D1:
                     var garageCapacity = ConsoleUI.AskForInt("What is the capacity of your garage?");
-                    
+
                     //Todo: Validate integer > 0
 
-                    _garageHandler = new GarageHandler(garageCapacity);
+                    //_garageHandler = new GarageHandler(garageCapacity);
+                    _garageHandler.Add(garageCapacity);
 
                     PrintGarageMenu();
                     break;
