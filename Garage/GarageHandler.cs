@@ -3,30 +3,21 @@ using System.Collections;
 
 namespace Garage
 {
-    internal class GarageHandler : IEnumerable
+    internal class GarageHandler
     {
-        private List<Garage<Vehicle>> _garages;
+        public List<Garage<Vehicle>> Garages;
 
         public GarageHandler()
         {
-            _garages = new();
+            Garages = new();
         }
 
-        public void Add(int garageCapacity)
+        public void Add(string garageName, int garageCapacity)
         {
+            ArgumentNullException.ThrowIfNull(garageName, nameof(garageName));
             ArgumentNullException.ThrowIfNull(garageCapacity, nameof(garageCapacity));
 
-            _garages.Add(new Garage<Vehicle>(garageCapacity));
+            Garages.Add(new Garage<Vehicle>(garageName, garageCapacity));
         }
-
-        public IEnumerator GetEnumerator()
-        {
-            foreach (var garage in _garages)
-            {
-                yield return garage;
-            }
-        }
-
-        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 }
