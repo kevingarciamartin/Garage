@@ -8,7 +8,7 @@
             Console.Clear();
         }
 
-        internal static void ConfirmExit(string exitable)
+        internal static void ConfirmExit(string exitable = "application")
         {
             WriteLine($"Are you sure you want to exit the {exitable}?"
                 + "\n1. Yes."
@@ -24,7 +24,7 @@
                 + "\n0. Exit the application.");
         }
 
-        internal static void PrintMenu()
+        internal static void PrintGarageMenu()
         {
             WriteLine("Menu"
                 + "\n1. List all parked vehicles."
