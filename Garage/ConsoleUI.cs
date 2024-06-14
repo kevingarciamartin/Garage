@@ -24,9 +24,9 @@
                 + "\n0. Exit the application.");
         }
 
-        internal static void PrintGarageMenu()
+        internal static void PrintGarageMenu(string garageName)
         {
-            WriteLine("Menu"
+            WriteLine($"Garage {garageName} Menu"
                 + "\n1. List all parked vehicles."
                 + "\n2. List the amount of each vehicle type currently in the garage."
                 + "\n3. Add a vehicle to the garage."
