@@ -66,7 +66,7 @@
                 Console.Write($"{prompt} ");
                 input = Console.ReadLine() ?? string.Empty;
 
-                if (string.IsNullOrWhiteSpace(input))
+                if (string.IsNullOrEmpty(input))
                 {
                     ErrorMessage("You must enter a valid input");
                 }
