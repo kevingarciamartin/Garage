@@ -1,4 +1,4 @@
-﻿namespace Garage
+﻿namespace Garage.Vehicles
 {
     abstract class Vehicle
     {
