@@ -16,6 +16,7 @@
         {
             ConsoleUI.PrintMainMenu();
 
+            //Todo: Make GetMainMenuCommand()
             var keyPressed = ConsoleUI.GetKey();
 
             switch (keyPressed)
@@ -48,6 +49,7 @@
             {
                 ConsoleUI.PrintGarageMenu(currentGarage.Name);
 
+                //Todo: Make GetGarageMenuCommand()
                 var keyPressed = ConsoleUI.GetKey();
 
                 switch (keyPressed)
