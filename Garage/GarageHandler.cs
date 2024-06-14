@@ -4,13 +4,13 @@ namespace Garage
 {
     internal class GarageHandler
     {
-        private Garage<Vehicle> _garage; 
-        public int GarageCapacity { get; }
+        private Garage<Vehicle> _garage;
+        private int _garageCapacity;
 
         public GarageHandler(int garageCapacity)
         {
-            GarageCapacity = garageCapacity;
-            _garage = new(GarageCapacity);
+            _garageCapacity = garageCapacity;
+            _garage = new(_garageCapacity);
         }
     }
 }
