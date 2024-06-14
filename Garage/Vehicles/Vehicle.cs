@@ -13,5 +13,6 @@
         public string RegistrationNumber { get; }
         public string Color { get; }
         public int NumberOfWheels { get; }
+        public string VehicleType => GetType().Name;
     }
 }
