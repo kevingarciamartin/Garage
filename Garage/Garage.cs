@@ -11,23 +11,48 @@ namespace Garage
     internal class Garage<T> : IEnumerable<T> where T : Vehicle
     {
         private T[] _vehicles;
+        private readonly int _capacity;
 
-        public int Capacity { get; }
+        public int Count => _vehicles.Count();
+        public bool IsFull => Count >= _capacity;
+        public bool IsEmpty => Count <= 0;
 
         public Garage(int capacity)
         {
-            Capacity = capacity;
-            _vehicles = new T[Capacity];
+            _capacity = capacity;
+            _vehicles = new T[_capacity];
+        }
+
+        public bool Add(T vehicle)
+        {
+            ArgumentNullException.ThrowIfNull(vehicle, "vehicle");
+
+            if (IsFull) return false;
+
+            _vehicles[Count - 1] = vehicle; 
+            
+            return true;
+        }
+
+        public bool Remove(T vehicle)
+        {
+            ArgumentNullException.ThrowIfNull(vehicle, "vehicle");
+
+            if (IsEmpty) return false;
+
+            //Todo: Remove vehicle from array
+
+            return true;
         }
 
         public IEnumerator<T> GetEnumerator()
         {
-            throw new NotImplementedException();
+            foreach (var vehicle in _vehicles)
+            {
+                yield return vehicle;
+            }
         }
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            throw new NotImplementedException();
-        }
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 }
