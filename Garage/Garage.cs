@@ -12,15 +12,28 @@ namespace Garage
     {
         private T[] _vehicles;
 
+        public string Name { get; }
         public int Capacity { get; }
-        public int Count => _vehicles.Count();
+        public int Count => _vehicles.Where(v => v != null).Count();
         public bool IsFull => Count >= Capacity;
         public bool IsEmpty => Count <= 0;
 
-        public Garage(int capacity)
+        public Garage(string name, int capacity)
         {
+            Name = name;
             Capacity = capacity;
             _vehicles = new T[capacity];
+        }
+
+        public void Print(Action<T> action)
+        {
+            if (IsEmpty) 
+                ConsoleUI.WriteLine("The garage is empty.");
+            else
+                foreach (var vehicle in _vehicles)
+                {
+                    action?.Invoke(vehicle);
+                }
         }
 
         public bool Add(T vehicle)
