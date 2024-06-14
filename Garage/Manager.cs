@@ -9,21 +9,25 @@
             do
             {
                 PrintMainMenu();
-                GetCommand();
             } while (true);
         }
 
-        private void GetCommand()
+        private void PrintMainMenu()
         {
+            ConsoleUI.PrintMainMenu();
+
             var keyPressed = ConsoleUI.GetKey();
 
             switch (keyPressed)
             {
                 case ConsoleKey.D1:
                     var garageCapacity = ConsoleUI.AskForInt("What is the capacity of your garage?");
+                    
                     //Todo: Validate integer > 0
 
                     _garageHandler = new GarageHandler(garageCapacity);
+
+                    PrintGarageMenu();
                     break;
                 case ConsoleKey.D0:
                     ConfirmExitCommand();
@@ -34,9 +38,48 @@
             }
         }
 
-        private void ConfirmExitCommand()
+        private void PrintGarageMenu()
         {
-            ConsoleUI.ConfirmExit("application");
+            bool inGarage = true;
+            do
+            {
+                ConsoleUI.PrintGarageMenu();
+
+                var keyPressed = ConsoleUI.GetKey();
+
+                switch (keyPressed)
+                {
+                    case ConsoleKey.D1:
+                        //Todo: List all parked vehicles
+                        break;
+                    case ConsoleKey.D2:
+                        //Todo: List the amount of each vehicle type currently in the garage
+                        break;
+                    case ConsoleKey.D3:
+                        //Todo: Add a vehicle to the garage
+                        break;
+                    case ConsoleKey.D4:
+                        //Todo: Remove a vehicle from the garage
+                        break;
+                    case ConsoleKey.D5:
+                        //Todo: Search a specific vehicle by registration number
+                        break;
+                    case ConsoleKey.D6:
+                        //Todo: Search vehicles by one or more characteristics
+                        break;
+                    case ConsoleKey.D0:
+                        inGarage = false;
+                        break;
+                    default:
+                        ConsoleUI.ErrorMessage("Please enter a valid input.");
+                        break;
+                }
+            } while (inGarage);
+        }
+
+        private static void ConfirmExitCommand()
+        {
+            ConsoleUI.ConfirmExit();
 
             var confirmationKeyPressed = ConsoleUI.GetKey();
 
@@ -52,11 +95,6 @@
                     ConsoleUI.ErrorMessage("Please enter a valid input.");
                     break;
             }
-        }
-
-        private void PrintMainMenu()
-        {
-            ConsoleUI.PrintMainMenu();
         }
     }
 }
