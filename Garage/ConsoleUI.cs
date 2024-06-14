@@ -41,18 +41,18 @@
             Console.WriteLine(message);
             Console.WriteLine();
         }
-        
+
         internal static void ErrorMessage(string message)
         {
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine(message);
+            WriteLine(message);
             Console.ResetColor();
         }
         
         internal static void SuccessMessage(string message)
         {
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine(message);
+            WriteLine(message);
             Console.ResetColor();
         }
 
@@ -71,9 +71,8 @@
                     ErrorMessage("You must enter a valid input");
                 }
                 else
+                    Console.WriteLine();
                     success = true;
-
-                Console.WriteLine();
 
             } while (!success);
 
