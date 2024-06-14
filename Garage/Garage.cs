@@ -11,21 +11,21 @@ namespace Garage
     internal class Garage<T> : IEnumerable<T> where T : Vehicle
     {
         private T[] _vehicles;
-        private readonly int _capacity;
 
+        public int Capacity { get; }
         public int Count => _vehicles.Count();
-        public bool IsFull => Count >= _capacity;
+        public bool IsFull => Count >= Capacity;
         public bool IsEmpty => Count <= 0;
 
         public Garage(int capacity)
         {
-            _capacity = capacity;
-            _vehicles = new T[_capacity];
+            Capacity = capacity;
+            _vehicles = new T[capacity];
         }
 
         public bool Add(T vehicle)
         {
-            ArgumentNullException.ThrowIfNull(vehicle, "vehicle");
+            ArgumentNullException.ThrowIfNull(vehicle, nameof(vehicle));
 
             if (IsFull) return false;
 
@@ -36,7 +36,7 @@ namespace Garage
 
         public bool Remove(T vehicle)
         {
-            ArgumentNullException.ThrowIfNull(vehicle, "vehicle");
+            ArgumentNullException.ThrowIfNull(vehicle, nameof(vehicle));
 
             if (IsEmpty) return false;
 

@@ -25,7 +25,6 @@
 
                     //Todo: Validate integer > 0
 
-                    //_garageHandler = new GarageHandler(garageCapacity);
                     _garageHandler.Add(garageCapacity);
 
                     PrintGarageMenu();
