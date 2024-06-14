@@ -8,7 +8,7 @@ namespace Garage.Vehicles
 {
     internal class Bus : Vehicle
     {
-        public Bus(string registrationNumber) : base(registrationNumber)
+        public Bus(string registrationNumber, string color, int numberOfWheels) : base(registrationNumber, color, numberOfWheels)
         {
         }
 

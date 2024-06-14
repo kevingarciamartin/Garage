@@ -26,16 +26,22 @@
                 switch (keyPressed)
                 {
                     case ConsoleKey.D1:
+                        //Todo: List all parked vehicles
                         break;
                     case ConsoleKey.D2:
+                        //Todo: List the amount of each vehicle type currently in the garage
                         break;
                     case ConsoleKey.D3:
+                        //Todo: Add a vehicle to the garage
                         break;
                     case ConsoleKey.D4:
+                        //Todo: Remove a vehicle from the garage
                         break;
                     case ConsoleKey.D5:
+                        //Todo: Search a specific vehicle by registration number
                         break;
                     case ConsoleKey.D6:
+                        //Todo: Search vehicles by one or more characteristics
                         break;
                     case ConsoleKey.D0:
                         inGarage = false;
