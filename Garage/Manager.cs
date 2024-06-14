@@ -21,13 +21,15 @@
             switch (keyPressed)
             {
                 case ConsoleKey.D1:
+                    var garageName = ConsoleUI.AskForString("What us the name of your garage?");
                     var garageCapacity = ConsoleUI.AskForInt("What is the capacity of your garage?");
 
                     //Todo: Validate integer > 0
 
-                    _garageHandler.Add(garageCapacity);
+                    _garageHandler.Add(garageName, garageCapacity);
+                    var currentGarage = _garageHandler.Garages.LastOrDefault(garage => garage != null);
 
-                    PrintGarageMenu();
+                    PrintGarageMenu(currentGarage!);
                     break;
                 case ConsoleKey.D0:
                     ConfirmExitCommand();
@@ -38,19 +40,20 @@
             }
         }
 
-        private void PrintGarageMenu()
+        private void PrintGarageMenu(Garage<Vehicles.Vehicle> currentGarage)
         {
             bool inGarage = true;
+
             do
             {
-                ConsoleUI.PrintGarageMenu();
+                ConsoleUI.PrintGarageMenu(currentGarage.Name);
 
                 var keyPressed = ConsoleUI.GetKey();
 
                 switch (keyPressed)
                 {
                     case ConsoleKey.D1:
-                        //Todo: List all parked vehicles
+                        currentGarage.Print(vehicle => Console.WriteLine($"{vehicle.VehicleType}: {vehicle.RegistrationNumber}"));
                         break;
                     case ConsoleKey.D2:
                         //Todo: List the amount of each vehicle type currently in the garage
