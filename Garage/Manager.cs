@@ -21,6 +21,7 @@
             {
                 case ConsoleKey.D1:
                     var garageCapacity = ConsoleUI.AskForInt("What is the capacity of your garage?");
+                    //Todo: Validate integer > 0
 
                     _garageHandler = new GarageHandler(garageCapacity);
                     break;

@@ -1,15 +1,16 @@
-﻿namespace Garage
+﻿using Garage.Vehicles;
+
+namespace Garage
 {
     internal class GarageHandler
     {
+        private Garage<Vehicle> _garage; 
         public int GarageCapacity { get; }
-
-        public Garage Garage { get; set; }
 
         public GarageHandler(int garageCapacity)
         {
             GarageCapacity = garageCapacity;
-            Garage = new(GarageCapacity);
+            _garage = new(GarageCapacity);
 
             PrintMenu();
         }
