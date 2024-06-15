@@ -15,24 +15,21 @@
         private void PrintMainMenu()
         {
             ConsoleUI.PrintMainMenu();
+            GetMainMenuCommand();
+        }
 
-            //Todo: Make GetMainMenuCommand()
+        private void GetMainMenuCommand()
+        {
             var keyPressed = ConsoleUI.GetKey();
 
             switch (keyPressed)
             {
                 case ConsoleKey.D1:
                     var garageName = ConsoleUI.AskForString("What is the name of your garage?");
-                    int garageCapacity;
-
-                    do
-                    {
-                        garageCapacity = ConsoleUI.AskForInt("What is the capacity of your garage?");
-
-                        if (garageCapacity <= 0) ConsoleUI.ErrorMessage("Please enter a positive integer.");
-                    } while (garageCapacity <= 0);
+                    var garageCapacity = GetGarageCapacity();
 
                     _garageHandler.Add(garageName, garageCapacity);
+
                     var currentGarage = _garageHandler.Garages.LastOrDefault(garage => garage != null);
 
                     PrintGarageMenu(currentGarage!);
@@ -46,6 +43,19 @@
             }
         }
 
+        private static int GetGarageCapacity()
+        {
+            int garageCapacity;
+            do
+            {
+                garageCapacity = ConsoleUI.AskForInt("What is the capacity of your garage?");
+
+                if (garageCapacity <= 0) ConsoleUI.ErrorMessage("Please enter a positive integer.");
+            } while (garageCapacity <= 0);
+
+            return garageCapacity;
+        }
+
         private void PrintGarageMenu(Garage<Vehicles.Vehicle> currentGarage)
         {
             bool inGarage = true;
@@ -53,38 +63,41 @@
             do
             {
                 ConsoleUI.PrintGarageMenu(currentGarage.Name);
+                inGarage = GetGarageMenuCommand(currentGarage);
 
-                //Todo: Make GetGarageMenuCommand()
+            } while (inGarage);
+        }
+
+        private bool GetGarageMenuCommand(Garage<Vehicles.Vehicle> currentGarage)
+        {
                 var keyPressed = ConsoleUI.GetKey();
 
                 switch (keyPressed)
                 {
                     case ConsoleKey.D1:
                         currentGarage.Print(vehicle => Console.WriteLine($"{vehicle.VehicleType}: {vehicle.RegistrationNumber}"));
-                        break;
+                        return true;
                     case ConsoleKey.D2:
                         //Todo: List the amount of each vehicle type currently in the garage
-                        break;
+                        return true;
                     case ConsoleKey.D3:
                         //Todo: Add a vehicle to the garage
-                        break;
+                        return true;
                     case ConsoleKey.D4:
                         //Todo: Remove a vehicle from the garage
-                        break;
+                        return true;
                     case ConsoleKey.D5:
                         //Todo: Search a specific vehicle by registration number
-                        break;
+                        return true;
                     case ConsoleKey.D6:
                         //Todo: Search vehicles by one or more characteristics
-                        break;
+                        return true;
                     case ConsoleKey.D0:
-                        inGarage = false;
-                        break;
+                        return false;
                     default:
                         ConsoleUI.ErrorMessage("Please enter a valid input.");
-                        break;
+                        return true;
                 }
-            } while (inGarage);
         }
 
         private static void ConfirmExitCommand()
