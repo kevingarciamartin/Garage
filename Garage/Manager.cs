@@ -1,4 +1,6 @@
-﻿namespace Garage
+﻿using Garage.Vehicles;
+
+namespace Garage
 {
     internal class Manager
     {
@@ -25,14 +27,7 @@
             switch (keyPressed)
             {
                 case ConsoleKey.D1:
-                    var garageName = ConsoleUI.AskForString("What is the name of your garage?");
-                    var garageCapacity = GetGarageCapacity();
-
-                    _garageHandler.Add(garageName, garageCapacity);
-
-                    var currentGarage = _garageHandler.Garages.LastOrDefault(garage => garage != null);
-
-                    PrintGarageMenu(currentGarage!);
+                    CreateGarage(_garageHandler);
                     break;
                 case ConsoleKey.D0:
                     ConfirmExitCommand();
@@ -43,17 +38,16 @@
             }
         }
 
-        private static int GetGarageCapacity()
+        private void CreateGarage(GarageHandler garageHandler)
         {
-            int garageCapacity;
-            do
-            {
-                garageCapacity = ConsoleUI.AskForInt("What is the capacity of your garage?");
+            var garageName = ConsoleUI.AskForString("Enter a name for the garage:");
+            var garageCapacity = ConsoleUI.AskForPositiveNonZeroInt("Enter a maximum capacity:");
 
-                if (garageCapacity <= 0) ConsoleUI.ErrorMessage("Please enter a positive integer.");
-            } while (garageCapacity <= 0);
+            _garageHandler.Add(garageName, garageCapacity);
 
-            return garageCapacity;
+            var currentGarage = _garageHandler.Garages.LastOrDefault(garage => garage != null);
+
+            PrintGarageMenu(currentGarage!);
         }
 
         private void PrintGarageMenu(Garage<Vehicles.Vehicle> currentGarage)
@@ -75,13 +69,14 @@
                 switch (keyPressed)
                 {
                     case ConsoleKey.D1:
-                        currentGarage.Print(vehicle => Console.WriteLine($"{vehicle.VehicleType}: {vehicle.RegistrationNumber}"));
+                        currentGarage.Print(vehicle => Console.WriteLine(
+                            $"{vehicle.VehicleType}, regnr: {vehicle.RegistrationNumber}"));
                         return true;
                     case ConsoleKey.D2:
                         //Todo: List the amount of each vehicle type currently in the garage
                         return true;
                     case ConsoleKey.D3:
-                        //Todo: Add a vehicle to the garage
+                        AddVehicle(currentGarage);
                         return true;
                     case ConsoleKey.D4:
                         //Todo: Remove a vehicle from the garage
@@ -98,6 +93,92 @@
                         ConsoleUI.ErrorMessage("Please enter a valid input.");
                         return true;
                 }
+        }
+
+        private static bool AddVehicle(Garage<Vehicle> currentGarage)
+        {
+            bool isSuccessful = false;
+
+            if (currentGarage.IsFull)
+            {
+                ConsoleUI.ErrorMessage("The garage is full.");
+                return isSuccessful;
+            }
+                
+            else
+            {
+                //Todo: Validate inputs
+                var vehicleType = GetVehicleType(currentGarage) ?? "car";
+                var registrationNumber = ConsoleUI.AskForString("Enter a unique registration number (e.g. 'ABC123'):");
+                var color = ConsoleUI.AskForString("Enter a vehicle color:");
+                var numberOfWheels = ConsoleUI.AskForPositiveInt("Enter the amount of wheels of the vehicle:");
+
+
+                switch (vehicleType)
+                {
+                    case "airplane":
+                        isSuccessful = currentGarage.Add(new Airplane(registrationNumber, color, numberOfWheels));
+                        break;
+                    case "boat":
+                        isSuccessful = currentGarage.Add(new Boat(registrationNumber, color, numberOfWheels));
+                        break;
+                    case "bus":
+                        isSuccessful = currentGarage.Add(new Bus(registrationNumber, color, numberOfWheels));
+                        break;
+                    case "car":
+                        isSuccessful = currentGarage.Add(new Car(registrationNumber, color, numberOfWheels));
+                        break;
+                    case "motorcycle":
+                        isSuccessful = currentGarage.Add(new Motorcycle(registrationNumber, color, numberOfWheels));
+                        break;
+                    default:
+                        ConsoleUI.ErrorMessage($"Vehicle type {vehicleType} does not exist.");
+                        break;
+                }
+
+                if (isSuccessful && vehicleType == "airplane")
+                    ConsoleUI.SuccessMessage($"An {vehicleType} has been added to your garage.");
+                else if (isSuccessful)
+                    ConsoleUI.SuccessMessage($"A {vehicleType} has been added to your garage.");
+
+                return isSuccessful;
+            }
+        }
+
+        private static string GetVehicleType(Garage<Vehicles.Vehicle> currentGarage)
+        {
+            string? vehicleType = null;
+
+            do
+            {
+                ConsoleUI.PrintGetVehicleTypeMenu(currentGarage.Name);
+
+                var keyPressed = ConsoleUI.GetKey();
+
+                switch (keyPressed)
+                {
+                    case ConsoleKey.D1:
+                        vehicleType = "airplane";
+                        break;
+                    case ConsoleKey.D2:
+                        vehicleType = "boat";
+                        break;
+                    case ConsoleKey.D3:
+                        vehicleType = "bus";
+                        break;
+                    case ConsoleKey.D4:
+                        vehicleType = "car";
+                        break;
+                    case ConsoleKey.D5:
+                        vehicleType = "motorcycle";
+                        break;
+                    default:
+                        ConsoleUI.ErrorMessage("Invalid input.");
+                        break;
+                }
+            } while (vehicleType == null);
+
+            return vehicleType;
         }
 
         private static void ConfirmExitCommand()
