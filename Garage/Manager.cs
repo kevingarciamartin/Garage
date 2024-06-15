@@ -22,10 +22,15 @@
             switch (keyPressed)
             {
                 case ConsoleKey.D1:
-                    var garageName = ConsoleUI.AskForString("What us the name of your garage?");
-                    var garageCapacity = ConsoleUI.AskForInt("What is the capacity of your garage?");
+                    var garageName = ConsoleUI.AskForString("What is the name of your garage?");
+                    int garageCapacity;
 
-                    //Todo: Validate integer > 0
+                    do
+                    {
+                        garageCapacity = ConsoleUI.AskForInt("What is the capacity of your garage?");
+
+                        if (garageCapacity <= 0) ConsoleUI.ErrorMessage("Please enter a positive integer.");
+                    } while (garageCapacity <= 0);
 
                     _garageHandler.Add(garageName, garageCapacity);
                     var currentGarage = _garageHandler.Garages.LastOrDefault(garage => garage != null);
