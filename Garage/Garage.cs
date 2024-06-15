@@ -36,10 +36,14 @@ namespace Garage
             if (IsEmpty) 
                 ConsoleUI.WriteLine("The garage is empty.");
             else
+            {
+                Console.WriteLine("List of parked vehicles:");
                 foreach (var vehicle in _vehicles)
                 {
                     action?.Invoke(vehicle);
                 }
+                Console.WriteLine();
+            }
         }
 
         public bool Add(T vehicle)
