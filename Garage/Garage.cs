@@ -8,7 +8,7 @@ using Garage.Vehicles;
 
 namespace Garage
 {
-    internal class Garage<T> : IEnumerable<T> where T : Vehicle
+    public class Garage<T> : IEnumerable<T> where T : Vehicle
     {
         private T[] _vehicles;
 
@@ -20,6 +20,12 @@ namespace Garage
 
         public Garage(string name, int capacity)
         {
+            if (string.IsNullOrWhiteSpace(name))
+                throw new ArgumentException($"'{nameof(name)}' cannot be null or whitespace.", nameof(name));
+
+            if (capacity <= 0)
+                throw new ArgumentException($"'{nameof(capacity)}' cannot be 0 or negative.", nameof(capacity));
+
             Name = name;
             Capacity = capacity;
             _vehicles = new T[capacity];
@@ -42,7 +48,7 @@ namespace Garage
 
             if (IsFull) return false;
 
-            _vehicles[Count - 1] = vehicle; 
+            _vehicles[Count] = vehicle; 
             
             return true;
         }
