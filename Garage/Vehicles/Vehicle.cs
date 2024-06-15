@@ -1,8 +1,8 @@
 ﻿namespace Garage.Vehicles
 {
-    abstract class Vehicle
+    public abstract class Vehicle
     {
-        protected Vehicle(string registrationNumber, string color, int numberOfWheels)
+        public Vehicle(string registrationNumber, string color, int numberOfWheels)
         {
             //Todo: Validate registration number
             RegistrationNumber = registrationNumber;

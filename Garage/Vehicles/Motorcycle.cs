@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Garage.Vehicles
 {
-    internal class Motorcycle : Vehicle
+    public class Motorcycle : Vehicle
     {
         public Motorcycle(string registrationNumber, string color, int numberOfWheels) : base(registrationNumber, color, numberOfWheels)
         {
