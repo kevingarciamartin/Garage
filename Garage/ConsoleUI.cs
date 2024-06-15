@@ -1,4 +1,7 @@
-﻿namespace Garage
+﻿
+
+
+namespace Garage
 {
     internal class ConsoleUI
     {
@@ -7,6 +10,7 @@
         {
             Console.Clear();
         }
+        internal static object GetKey() => Console.ReadKey(intercept: true).Key;
 
         internal static void ConfirmExit(string exitable = "application")
         {
@@ -15,8 +19,6 @@
                 + "\n0. No.");
         }
 
-        internal static object GetKey() => Console.ReadKey(intercept: true).Key;
-
         internal static void PrintMainMenu()
         {
             WriteLine("Main Menu"
@@ -24,16 +26,33 @@
                 + "\n0. Exit the application.");
         }
 
+        private static void PrintGarageMenuTitle(string garageName)
+        {
+            Console.WriteLine($"Garage {garageName} Menu");
+        }
+
         internal static void PrintGarageMenu(string garageName)
         {
-            WriteLine($"Garage {garageName} Menu"
-                + "\n1. List all parked vehicles."
+            PrintGarageMenuTitle(garageName);
+            WriteLine(
+                    "1. List all parked vehicles."
                 + "\n2. List the amount of each vehicle type currently in the garage."
                 + "\n3. Add a vehicle to the garage."
                 + "\n4. Remove a vehicle from the garage."
                 + "\n5. Search a specific vehicle by registration number."
                 + "\n6. Search vehicles by one or more characteristics."
                 + "\n0. Return to main menu.");
+        }
+
+        internal static void PrintGetVehicleTypeMenu(string garageName)
+        {
+            PrintGarageMenuTitle(garageName);
+            WriteLine("Choose a vehicle type."
+                + "\n1. Airplane."
+                + "\n2. Boat."
+                + "\n3. Bus."
+                + "\n4. Car."
+                + "\n5. Motorcycle.");
         }
 
         internal static void WriteLine(string message)
@@ -94,6 +113,31 @@
 
             } while (true);
         }
+        
+        internal static int AskForPositiveInt(string prompt)
+        {
+            int input;
+            do
+            {
+                input = ConsoleUI.AskForInt(prompt);
 
+                if (input < 0) ConsoleUI.ErrorMessage("Please enter a positive integer.");
+            } while (input < 0);
+
+            return input;
+        }
+
+        internal static int AskForPositiveNonZeroInt(string prompt)
+        {
+            int input;
+            do
+            {
+                input = ConsoleUI.AskForInt(prompt);
+
+                if (input <= 0) ConsoleUI.ErrorMessage("Please enter a positive integer.");
+            } while (input <= 0);
+
+            return input;
+        }
     }
 }
