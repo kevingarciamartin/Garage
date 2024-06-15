@@ -9,7 +9,6 @@ namespace Garage.Tests.Tests
 {
     public class GarageTests
     {
-        //private consts
         private const string validString = "Valid";
         private const string emptyString = "";
         private const string whiteSpaceString = " ";
@@ -17,11 +16,9 @@ namespace Garage.Tests.Tests
         private const int invalidCapacity = -1;
         private const int initialCount = 0;
 
-        //private fields
         private readonly Garage<Vehicle> _garage;
         private readonly Car _car;
 
-        //constructor
         public GarageTests()
         {
             _garage = new Garage<Vehicle>(validString, validCapacity);
@@ -69,7 +66,7 @@ namespace Garage.Tests.Tests
         }
 
         [Fact]
-        public void Add_ShouldReturnFalse_WhenFull()
+        public void Add_ShouldReturnFalse_WhenIsFull()
         {
             _garage.Add(_car);
 
@@ -77,7 +74,7 @@ namespace Garage.Tests.Tests
         }
         
         [Fact]
-        public void Add_ShouldReturnTrue_WhenNotFull()
+        public void Add_ShouldReturnTrue_WhenNotIsFull()
         {
             Assert.True(_garage.Add(_car));
         }
