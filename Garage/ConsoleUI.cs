@@ -65,6 +65,7 @@
             {
                 Console.Write($"{prompt} ");
                 input = Console.ReadLine() ?? string.Empty;
+                Console.WriteLine();
 
                 if (string.IsNullOrWhiteSpace(input))
                 {
@@ -72,7 +73,6 @@
                 }
                 else
                 {
-                    Console.WriteLine();
                     success = true;
                 }
 
