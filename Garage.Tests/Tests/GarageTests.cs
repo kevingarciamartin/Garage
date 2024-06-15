@@ -47,6 +47,7 @@ namespace Garage.Tests.Tests
         public void Constructor_ShouldThrowException_OnInvalidCapacity()
         {
             Assert.Throws<ArgumentException>(() => new Garage<Vehicle>(validString, invalidCapacity));
+            Assert.Throws<ArgumentException>(() => new Garage<Vehicle>(validString, 0));
         }
 
         [Fact]
