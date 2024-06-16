@@ -1,4 +1,5 @@
 ﻿using Garage.Vehicles;
+using System.Linq;
 
 namespace Garage
 {
@@ -80,7 +81,7 @@ namespace Garage
                         return true;
                     case ConsoleKey.D4:
                         //Todo: Remove a vehicle from the garage
-                        //RemoveVehicle(currentGarage);
+                        RemoveVehicle(currentGarage);
                         return true;
                     case ConsoleKey.D5:
                         //Todo: Search a specific vehicle by registration number
@@ -136,28 +137,30 @@ namespace Garage
                 }
 
                 if (isSuccessful && VehicleTypes.AllTypesStartingWithVowel.Contains(vehicleType))
-                    ConsoleUI.SuccessMessage($"An {vehicleType} has been added to your garage.");
+                    ConsoleUI.SuccessMessage($"An {vehicleType.ToLower()} has been added to your garage.");
                 else if (isSuccessful)
-                    ConsoleUI.SuccessMessage($"A {vehicleType} has been added to your garage.");
+                    ConsoleUI.SuccessMessage($"A {vehicleType.ToLower()} has been added to your garage.");
 
                 return isSuccessful;
             }
         }
-        
-        //private bool RemoveVehicle(Garage<Vehicle> currentGarage)
-        //{
-        //    bool isSuccessful = false;
 
-        //    if (currentGarage == null)
-        //    {
-        //        ConsoleUI.ErrorMessage("The garage is empty.");
-        //        return isSuccessful;
-        //    }
-        //    else
-        //    {
-        //        isSuccessful = currentGarage.Remove
-        //    }
-        //}
+        private bool RemoveVehicle(Garage<Vehicle> currentGarage)
+        {
+            bool isSuccessful = false;
+
+            if (currentGarage.IsEmpty)
+            {
+                ConsoleUI.ErrorMessage("The garage is empty.");
+                return isSuccessful;
+            }
+            else
+            {
+                isSuccessful = currentGarage.Remove();
+
+                return isSuccessful;
+            }
+        }
 
         private static string GetVehicleType(Garage<Vehicles.Vehicle> currentGarage)
         {
