@@ -73,13 +73,14 @@ namespace Garage
                         return true;
                     case ConsoleKey.D2:
                         //Todo: List the amount of each vehicle type currently in the garage
-                        
+                        currentGarage.PrintVehicleTypes();
                         return true;
                     case ConsoleKey.D3:
                         AddVehicle(currentGarage);
                         return true;
                     case ConsoleKey.D4:
                         //Todo: Remove a vehicle from the garage
+                        //RemoveVehicle(currentGarage);
                         return true;
                     case ConsoleKey.D5:
                         //Todo: Search a specific vehicle by registration number
@@ -104,7 +105,6 @@ namespace Garage
                 ConsoleUI.ErrorMessage("The garage is full.");
                 return isSuccessful;
             }
-                
             else
             {
                 //Todo: Validate inputs
@@ -113,22 +113,21 @@ namespace Garage
                 var color = ConsoleUI.AskForString("Enter a vehicle color:");
                 var numberOfWheels = ConsoleUI.AskForPositiveInt("Enter the amount of wheels of the vehicle:");
 
-
                 switch (vehicleType)
                 {
-                    case "airplane":
+                    case VehicleTypes.Airplane:
                         isSuccessful = currentGarage.Add(new Airplane(registrationNumber, color, numberOfWheels));
                         break;
-                    case "boat":
+                    case VehicleTypes.Boat:
                         isSuccessful = currentGarage.Add(new Boat(registrationNumber, color, numberOfWheels));
                         break;
-                    case "bus":
+                    case VehicleTypes.Bus:
                         isSuccessful = currentGarage.Add(new Bus(registrationNumber, color, numberOfWheels));
                         break;
-                    case "car":
+                    case VehicleTypes.Car:
                         isSuccessful = currentGarage.Add(new Car(registrationNumber, color, numberOfWheels));
                         break;
-                    case "motorcycle":
+                    case VehicleTypes.Motorcycle:
                         isSuccessful = currentGarage.Add(new Motorcycle(registrationNumber, color, numberOfWheels));
                         break;
                     default:
@@ -136,7 +135,7 @@ namespace Garage
                         break;
                 }
 
-                if (isSuccessful && vehicleType == "airplane")
+                if (isSuccessful && VehicleTypes.AllTypesStartingWithVowel.Contains(vehicleType))
                     ConsoleUI.SuccessMessage($"An {vehicleType} has been added to your garage.");
                 else if (isSuccessful)
                     ConsoleUI.SuccessMessage($"A {vehicleType} has been added to your garage.");
@@ -144,6 +143,21 @@ namespace Garage
                 return isSuccessful;
             }
         }
+        
+        //private bool RemoveVehicle(Garage<Vehicle> currentGarage)
+        //{
+        //    bool isSuccessful = false;
+
+        //    if (currentGarage == null)
+        //    {
+        //        ConsoleUI.ErrorMessage("The garage is empty.");
+        //        return isSuccessful;
+        //    }
+        //    else
+        //    {
+        //        isSuccessful = currentGarage.Remove
+        //    }
+        //}
 
         private static string GetVehicleType(Garage<Vehicles.Vehicle> currentGarage)
         {
@@ -158,19 +172,19 @@ namespace Garage
                 switch (keyPressed)
                 {
                     case ConsoleKey.D1:
-                        vehicleType = "airplane";
+                        vehicleType = VehicleTypes.Airplane;
                         break;
                     case ConsoleKey.D2:
-                        vehicleType = "boat";
+                        vehicleType = VehicleTypes.Boat;
                         break;
                     case ConsoleKey.D3:
-                        vehicleType = "bus";
+                        vehicleType = VehicleTypes.Bus;
                         break;
                     case ConsoleKey.D4:
-                        vehicleType = "car";
+                        vehicleType = VehicleTypes.Car;
                         break;
                     case ConsoleKey.D5:
-                        vehicleType = "motorcycle";
+                        vehicleType = VehicleTypes.Motorcycle;
                         break;
                     default:
                         ConsoleUI.ErrorMessage("Invalid input.");

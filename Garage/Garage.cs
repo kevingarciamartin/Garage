@@ -47,6 +47,30 @@ namespace Garage
             }
         }
 
+        public void PrintVehicleTypes()
+        {
+            if (IsEmpty)
+                ConsoleUI.WriteLine("The garage is empty.");
+            else
+            {
+                string[] vehicleTypes = ["Airplane", "Boat", "Bus", "Car", "Motorcycle"];
+
+                Console.WriteLine("List of vehicle types:");
+
+                foreach (var vehicleType in VehicleTypes.AllTypes)
+                {
+                    //Todo: Fix issue with object reference not set to an instance of an object
+                    var vehiclesOfType = _vehicles.Where(v => v.VehicleType == vehicleType).ToArray();
+                    int vehicleCount = vehiclesOfType.Count();
+
+                    if (vehicleCount > 0)
+                        Console.WriteLine($"{vehicleType}(s): {vehicleCount}");
+                }
+
+                Console.WriteLine();
+            }
+        }
+
         public bool Add(T vehicle)
         {
             ArgumentNullException.ThrowIfNull(vehicle, nameof(vehicle));
@@ -78,5 +102,6 @@ namespace Garage
         }
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
     }
 }
