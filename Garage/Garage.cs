@@ -31,7 +31,7 @@ namespace Garage
             _vehicles = new T[capacity];
         }
 
-        public void Print(Action<T> action)
+        public void PrintParkedVehicles()
         {
             if (IsEmpty) 
                 ConsoleUI.WriteLine("The garage is empty.");
@@ -40,7 +40,8 @@ namespace Garage
                 Console.WriteLine("List of parked vehicles:");
                 foreach (var vehicle in _vehicles)
                 {
-                    action?.Invoke(vehicle);
+                    if (vehicle != null)
+                        Console.WriteLine($"{vehicle.VehicleType}, regnr: {vehicle.RegistrationNumber}");
                 }
                 Console.WriteLine();
             }

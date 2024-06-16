@@ -69,11 +69,11 @@ namespace Garage
                 switch (keyPressed)
                 {
                     case ConsoleKey.D1:
-                        currentGarage.Print(vehicle => Console.WriteLine(
-                            $"{vehicle.VehicleType}, regnr: {vehicle.RegistrationNumber}"));
+                        currentGarage.PrintParkedVehicles();
                         return true;
                     case ConsoleKey.D2:
                         //Todo: List the amount of each vehicle type currently in the garage
+                        
                         return true;
                     case ConsoleKey.D3:
                         AddVehicle(currentGarage);
