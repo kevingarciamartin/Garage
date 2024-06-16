@@ -53,8 +53,6 @@ namespace Garage
                 ConsoleUI.WriteLine("The garage is empty.");
             else
             {
-                string[] vehicleTypes = ["Airplane", "Boat", "Bus", "Car", "Motorcycle"];
-
                 Console.WriteLine("List of vehicle types:");
 
                 foreach (var vehicleType in VehicleTypes.AllTypes)
@@ -82,13 +80,12 @@ namespace Garage
             return true;
         }
 
-        public bool Remove(T vehicle)
+        public bool Remove()
         {
-            ArgumentNullException.ThrowIfNull(vehicle, nameof(vehicle));
-
             if (IsEmpty) return false;
 
             //Todo: Remove vehicle from array
+            _vehicles[Count - 1] = null;
 
             return true;
         }
