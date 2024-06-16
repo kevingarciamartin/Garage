@@ -17,12 +17,20 @@ namespace Garage.Tests.Tests
         private const int initialCount = 0;
 
         private readonly Garage<Vehicle> _garage;
+        private readonly Airplane _airplane;
+        private readonly Boat _boat;
+        private readonly Bus _bus;
         private readonly Car _car;
+        private readonly Motorcycle _motorcycle;
 
         public GarageTests()
         {
             _garage = new Garage<Vehicle>(validString, validCapacity);
+            _airplane = new Airplane(registrationNumber: "ABC123", color: "Red", numberOfWheels: 4);
+            _boat = new Boat(registrationNumber: "ABC123", color: "Red", numberOfWheels: 4);
+            _bus = new Bus(registrationNumber: "ABC123", color: "Red", numberOfWheels: 4);
             _car = new Car(registrationNumber: "ABC123", color: "Red", numberOfWheels: 4);
+            _motorcycle = new Motorcycle(registrationNumber: "ABC123", color: "Red", numberOfWheels: 4);
         }
 
         [Fact]
