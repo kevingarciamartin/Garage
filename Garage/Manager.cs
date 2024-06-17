@@ -28,7 +28,7 @@ namespace Garage
             switch (keyPressed)
             {
                 case ConsoleKey.D1:
-                    CreateGarage(_garageHandler);
+                    CreateGarage();
                     break;
                 case ConsoleKey.D0:
                     ConfirmExitCommand();
@@ -39,14 +39,14 @@ namespace Garage
             }
         }
 
-        private void CreateGarage(GarageHandler garageHandler)
+        private void CreateGarage()
         {
             var garageName = ConsoleUI.AskForString("Enter a name for the garage:");
             var garageCapacity = ConsoleUI.AskForPositiveNonZeroInt("Enter a maximum capacity:");
 
             _garageHandler.Add(garageName, garageCapacity);
 
-            var currentGarage = _garageHandler.Garages.LastOrDefault(garage => garage != null);
+            var currentGarage = _garageHandler.Garages.LastOrDefault(g => g != null);
 
             PrintGarageMenu(currentGarage!);
         }
@@ -73,7 +73,6 @@ namespace Garage
                         currentGarage.PrintParkedVehicles();
                         return true;
                     case ConsoleKey.D2:
-                        //Todo: List the amount of each vehicle type currently in the garage
                         currentGarage.PrintVehicleTypes();
                         return true;
                     case ConsoleKey.D3:
@@ -85,6 +84,7 @@ namespace Garage
                         return true;
                     case ConsoleKey.D5:
                         //Todo: Search a specific vehicle by registration number
+                        SearchVehicleByRegistrationNumber(currentGarage);
                         return true;
                     case ConsoleKey.D6:
                         //Todo: Search vehicles by one or more characteristics
@@ -95,6 +95,33 @@ namespace Garage
                         ConsoleUI.ErrorMessage("Please enter a valid input.");
                         return true;
                 }
+        }
+
+        private bool SearchVehicleByRegistrationNumber(Garage<Vehicle> currentGarage)
+        {
+            bool isSuccessful = false;
+
+            if (currentGarage.IsEmpty)
+            {
+                ConsoleUI.WriteLine("The garage is empty.");
+                return isSuccessful;
+            }
+
+            var registrationNumber = ConsoleUI.AskForString("Enter the registration number you would like to search for:");
+
+            var searchedVehicle = currentGarage.FirstOrDefault(v => string.Equals(v.RegistrationNumber.ToLower(), registrationNumber.ToLower()));
+
+            if (searchedVehicle == null)
+            {
+                ConsoleUI.ErrorMessage($"A vehicle with registration number '{registrationNumber}' could not be found.");
+                return isSuccessful;
+            }
+            else
+                ConsoleUI.WriteLine($"{searchedVehicle.VehicleType}, "
+                                  + $"regnr: {searchedVehicle.RegistrationNumber}, "
+                                  + $"color: {searchedVehicle.Color}");
+
+            return isSuccessful = true;
         }
 
         private static bool AddVehicle(Garage<Vehicle> currentGarage)
