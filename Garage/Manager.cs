@@ -122,17 +122,23 @@ namespace Garage
             IEnumerable<Vehicle> searchedVehicles = null!;
 
             if (!string.IsNullOrWhiteSpace(searchedVehicleType))
-                searchedVehicles = currentGarage.Where(v => string.Equals(v.VehicleType.ToLower(), searchedVehicleType));
+                searchedVehicles = currentGarage.Where(v => string.Equals(v.VehicleType.ToLower(), searchedVehicleType.ToLower()));
 
             if (!string.IsNullOrWhiteSpace(searchedVehicleColor))
-                searchedVehicles = currentGarage.Where(v => string.Equals(v.Color.ToLower(), searchedVehicleColor));
+                searchedVehicles = currentGarage.Where(v => string.Equals(v.Color.ToLower(), searchedVehicleColor.ToLower()));
 
             if (Int32.TryParse(numberOfWheelsInput, out int searchedNumberOfWheels))
-                searchedVehicles = currentGarage.Where(v => v.NumberOfWheels == searchedNumberOfWheels);
-
+                searchedVehicles = currentGarage.Where(v => Int32.Equals(v.NumberOfWheels, searchedNumberOfWheels));
+            
             if (searchedVehicles == null)
             {
-                ConsoleUI.ErrorMessage($"There exist no vehicles with the following characteristics;");
+                ConsoleUI.ErrorMessage("No search keywords have been entered.");
+
+                return isSuccessful;
+            }
+            else if (!searchedVehicles.Any())
+            {
+                ConsoleUI.ErrorMessage("There exist no vehicles with the following characteristics;");
                 
                 Console.ForegroundColor = ConsoleColor.Red;
                 
@@ -154,7 +160,7 @@ namespace Garage
             {
                 foreach (var vehicle in searchedVehicles)
                 {
-                    vehicle.Print();
+                    vehicle?.Print();
                 }
 
                 Console.WriteLine();
@@ -175,15 +181,21 @@ namespace Garage
 
             var registrationNumber = ConsoleUI.AskForString("Enter the registration number you would like to search for:");
 
-            var searchedVehicle = currentGarage.FirstOrDefault(v => string.Equals(v.RegistrationNumber.ToLower(), registrationNumber.ToLower()));
+            var searchedVehicle = currentGarage.Where(v => string.Equals(v.RegistrationNumber.ToLower(), registrationNumber.ToLower()));
 
-            if (searchedVehicle == null)
+            if (!searchedVehicle.Any())
             {
                 ConsoleUI.ErrorMessage($"A vehicle with registration number '{registrationNumber}' could not be found.");
                 return isSuccessful;
             }
             else
-                searchedVehicle.Print();
+            {
+                foreach (var vehicle in searchedVehicle)
+                {
+                    vehicle.Print();
+                    Console.WriteLine();
+                }
+            }
 
             return isSuccessful = true;
         }
@@ -194,7 +206,7 @@ namespace Garage
 
             if (currentGarage.IsFull)
             {
-                ConsoleUI.ErrorMessage("The garage is full.");
+                ConsoleUI.WriteLine("The garage is full.");
                 return isSuccessful;
             }
             else
@@ -234,7 +246,8 @@ namespace Garage
                     Console.Write("A");
                     if (VehicleTypes.AllTypesStartingWithVowel.Contains(vehicleType))
                         Console.Write("n");
-                    Console.Write($" {vehicleType.ToLower()} has been added to the garage.");
+                    Console.WriteLine($" {vehicleType.ToLower()} has been added to the garage.");
+                    Console.WriteLine();
 
                     Console.ResetColor();
                 }
@@ -249,7 +262,7 @@ namespace Garage
 
             if (currentGarage.IsEmpty)
             {
-                ConsoleUI.ErrorMessage("The garage is empty.");
+                ConsoleUI.WriteLine("The garage is empty.");
                 return isSuccessful;
             }
             else
