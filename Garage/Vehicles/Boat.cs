@@ -12,6 +12,6 @@ namespace Garage.Vehicles
         {
         }
 
-        public string Characteristic { get; } = "Hull";
+        public string Characteristic { get; } = "Watercraft";
     }
 }
