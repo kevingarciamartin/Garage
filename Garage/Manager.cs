@@ -235,6 +235,8 @@ namespace Garage
                     if (VehicleTypes.AllTypesStartingWithVowel.Contains(vehicleType))
                         Console.Write("n");
                     Console.Write($" {vehicleType.ToLower()} has been added to the garage.");
+
+                    Console.ResetColor();
                 }
 
                 return isSuccessful;
