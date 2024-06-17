@@ -11,5 +11,7 @@ namespace Garage.Vehicles
         public Airplane(string registrationNumber, string color, int numberOfWheels) : base(registrationNumber, color, numberOfWheels)
         {
         }
+
+        public string Characteristic { get; } = "Wings";
     }
 }
