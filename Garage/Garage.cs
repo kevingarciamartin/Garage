@@ -53,16 +53,29 @@ namespace Garage
                 ConsoleUI.WriteLine("The garage is empty.");
             else
             {
+                Dictionary<string, int> vehicleTypesInGarage = new()
+                {
+                    { VehicleTypes.Airplane, 0 },
+                    { VehicleTypes.Boat, 0 },
+                    { VehicleTypes.Bus, 0 },
+                    { VehicleTypes.Car, 0 },
+                    { VehicleTypes.Motorcycle, 0 }
+                };
+
+                foreach (var vehicle in _vehicles)
+                {
+                    if (vehicle != null)
+                        vehicleTypesInGarage[vehicle.VehicleType]++;
+                }
+
                 Console.WriteLine("List of vehicle types:");
 
-                foreach (var vehicleType in VehicleTypes.AllTypes)
+                foreach (var keyValuePair in vehicleTypesInGarage)
                 {
-                    //Todo: Fix issue with object reference not set to an instance of an object
-                    var vehiclesOfType = _vehicles.Where(v => v.VehicleType == vehicleType).ToArray();
-                    int vehicleCount = vehiclesOfType.Count();
-
-                    if (vehicleCount > 0)
-                        Console.WriteLine($"{vehicleType}(s): {vehicleCount}");
+                    if (keyValuePair.Value > 0)
+                    {
+                        Console.WriteLine($"{keyValuePair.Key}: {keyValuePair.Value}");
+                    }
                 }
 
                 Console.WriteLine();
