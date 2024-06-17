@@ -83,11 +83,11 @@ namespace Garage
                         RemoveVehicle(currentGarage);
                         return true;
                     case ConsoleKey.D5:
-                        //Todo: Search a specific vehicle by registration number
                         SearchVehicleByRegistrationNumber(currentGarage);
                         return true;
                     case ConsoleKey.D6:
                         //Todo: Search vehicles by one or more characteristics
+                        SearchVehiclesByCharacteristics(currentGarage);
                         return true;
                     case ConsoleKey.D0:
                         return false;
@@ -95,6 +95,76 @@ namespace Garage
                         ConsoleUI.ErrorMessage("Please enter a valid input.");
                         return true;
                 }
+        }
+
+        private bool SearchVehiclesByCharacteristics(Garage<Vehicle> currentGarage)
+        {
+            bool isSuccessful = false;
+
+            if (currentGarage.IsEmpty)
+            {
+                ConsoleUI.WriteLine("The garage is empty.");
+                return isSuccessful;
+            }
+
+            ConsoleUI.WriteLine("Enter the characteristics you would like to search for. "
+                              + "\nLeave empty if you don't want to search for that specific characteristic.");
+            
+            Console.Write("Vehicle type: ");
+            var searchedVehicleType = Console.ReadLine();
+            
+            Console.Write("Vehicle color: ");
+            var searchedVehicleColor = Console.ReadLine();
+
+            Console.Write("Number of wheels: ");
+            var numberOfWheelsInput = Console.ReadLine();
+            Console.WriteLine();
+
+            IEnumerable<Vehicle> searchedVehicles = null!;
+
+            if (!string.IsNullOrWhiteSpace(searchedVehicleType))
+                searchedVehicles = currentGarage.Where(v => string.Equals(v.VehicleType.ToLower(), searchedVehicleType));
+
+            if (!string.IsNullOrWhiteSpace(searchedVehicleColor))
+                searchedVehicles = currentGarage.Where(v => string.Equals(v.Color.ToLower(), searchedVehicleColor));
+
+            if (Int32.TryParse(numberOfWheelsInput, out int searchedNumberOfWheels))
+                searchedVehicles = currentGarage.Where(v => v.NumberOfWheels == searchedNumberOfWheels);
+
+            if (searchedVehicles == null)
+            {
+                ConsoleUI.ErrorMessage($"There exist no vehicles with the following characteristics;");
+                
+                Console.ForegroundColor = ConsoleColor.Red;
+                
+                if (!string.IsNullOrWhiteSpace(searchedVehicleType))
+                    Console.WriteLine($"Vehicle type: {searchedVehicleType}");
+
+                if (!string.IsNullOrWhiteSpace(searchedVehicleColor))
+                    Console.WriteLine($"Vehicle color: {searchedVehicleColor}");
+
+                if (!string.IsNullOrWhiteSpace(numberOfWheelsInput))
+                    Console.WriteLine($"Number of wheels: {numberOfWheelsInput}");
+
+                Console.ResetColor();
+                Console.WriteLine();
+
+                return isSuccessful;
+            }
+            else
+            {
+                foreach (var vehicle in searchedVehicles)
+                {
+                    Console.WriteLine($"{vehicle.VehicleType}, "
+                                  + $"regNr: {vehicle.RegistrationNumber}, "
+                                  + $"color: {vehicle.Color}, "
+                                  + $"nrOfWheels: {vehicle.NumberOfWheels}");
+                }
+
+                Console.WriteLine();
+            }
+
+            return isSuccessful = true;
         }
 
         private bool SearchVehicleByRegistrationNumber(Garage<Vehicle> currentGarage)
@@ -118,7 +188,7 @@ namespace Garage
             }
             else
                 ConsoleUI.WriteLine($"{searchedVehicle.VehicleType}, "
-                                  + $"regnr: {searchedVehicle.RegistrationNumber}, "
+                                  + $"regNr: {searchedVehicle.RegistrationNumber}, "
                                   + $"color: {searchedVehicle.Color}");
 
             return isSuccessful = true;
