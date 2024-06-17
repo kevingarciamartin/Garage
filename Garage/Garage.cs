@@ -41,7 +41,9 @@ namespace Garage
                 foreach (var vehicle in _vehicles)
                 {
                     if (vehicle != null)
-                        Console.WriteLine($"{vehicle.VehicleType}, regnr: {vehicle.RegistrationNumber}");
+                        Console.WriteLine($"{vehicle.VehicleType}, "
+                                        + $"regnr: {vehicle.RegistrationNumber}, "
+                                        + $"color: {vehicle.Color}");
                 }
                 Console.WriteLine();
             }
