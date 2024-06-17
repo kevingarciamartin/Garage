@@ -86,7 +86,6 @@ namespace Garage
                         SearchVehicleByRegistrationNumber(currentGarage);
                         return true;
                     case ConsoleKey.D6:
-                        //Todo: Search vehicles by one or more characteristics
                         SearchVehiclesByCharacteristics(currentGarage);
                         return true;
                     case ConsoleKey.D0:
@@ -155,10 +154,7 @@ namespace Garage
             {
                 foreach (var vehicle in searchedVehicles)
                 {
-                    Console.WriteLine($"{vehicle.VehicleType}, "
-                                  + $"regNr: {vehicle.RegistrationNumber}, "
-                                  + $"color: {vehicle.Color}, "
-                                  + $"nrOfWheels: {vehicle.NumberOfWheels}");
+                    vehicle.Print();
                 }
 
                 Console.WriteLine();
@@ -187,9 +183,7 @@ namespace Garage
                 return isSuccessful;
             }
             else
-                ConsoleUI.WriteLine($"{searchedVehicle.VehicleType}, "
-                                  + $"regNr: {searchedVehicle.RegistrationNumber}, "
-                                  + $"color: {searchedVehicle.Color}");
+                searchedVehicle.Print();
 
             return isSuccessful = true;
         }
@@ -233,10 +227,15 @@ namespace Garage
                         break;
                 }
 
-                if (isSuccessful && VehicleTypes.AllTypesStartingWithVowel.Contains(vehicleType))
-                    ConsoleUI.SuccessMessage($"An {vehicleType.ToLower()} has been added to your garage.");
-                else if (isSuccessful)
-                    ConsoleUI.SuccessMessage($"A {vehicleType.ToLower()} has been added to your garage.");
+                if (isSuccessful)
+                {
+                    Console.ForegroundColor = ConsoleColor.Green;
+
+                    Console.Write("A");
+                    if (VehicleTypes.AllTypesStartingWithVowel.Contains(vehicleType))
+                        Console.Write("n");
+                    Console.Write($" {vehicleType.ToLower()} has been added to the garage.");
+                }
 
                 return isSuccessful;
             }
