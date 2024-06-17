@@ -40,10 +40,7 @@ namespace Garage
                 Console.WriteLine("List of parked vehicles:");
                 foreach (var vehicle in _vehicles)
                 {
-                    if (vehicle != null)
-                        Console.WriteLine($"{vehicle.VehicleType}, "
-                                        + $"regnr: {vehicle.RegistrationNumber}, "
-                                        + $"color: {vehicle.Color}");
+                    vehicle?.Print();
                 }
                 Console.WriteLine();
             }
@@ -100,7 +97,7 @@ namespace Garage
             if (IsEmpty) return false;
 
             //Todo: Remove vehicle from array
-            _vehicles[Count - 1] = null;
+            _vehicles[Count - 1] = null!;
 
             return true;
         }
