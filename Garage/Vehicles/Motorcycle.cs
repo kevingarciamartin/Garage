@@ -12,6 +12,6 @@ namespace Garage.Vehicles
         {
         }
 
-        public string Characteristic { get; } = "Two wheels";
+        public string Characteristic { get; } = "High torque to weight ratio";
     }
 }
