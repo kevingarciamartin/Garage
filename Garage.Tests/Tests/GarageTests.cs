@@ -95,5 +95,28 @@ namespace Garage.Tests.Tests
 
             Assert.Equal(1, _garage.Count);
         }
+
+        [Fact]
+        public void Remove_ShouldReturnFalse_WhenIsEmpty()
+        {
+            Assert.False(_garage.Remove());
+        }
+
+        [Fact]
+        public void Remove_ShouldReturnTrue_WhenNotIsEmpty()
+        {
+            _garage.Add(_car);
+
+            Assert.True(_garage.Remove());
+        }
+
+        [Fact]
+        public void Remove_ShouldDecreaseCount_By_1()
+        {
+            _garage.Add(_car);
+            _garage.Remove();
+
+            Assert.Equal(initialCount, _garage.Count);
+        }
     }
 }
