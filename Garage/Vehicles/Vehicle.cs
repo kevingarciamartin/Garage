@@ -14,5 +14,17 @@
         public string Color { get; }
         public int NumberOfWheels { get; }
         public string VehicleType => GetType().Name;
+
+        public string Print()
+        {
+            var message = $"{VehicleType}, "
+                        + $"regNr: {RegistrationNumber}, "
+                        + $"color: {Color}, "
+                        + $"nrOfWheels: {NumberOfWheels}";
+
+            Console.WriteLine(message);
+
+            return message;
+        }
     }
 }
