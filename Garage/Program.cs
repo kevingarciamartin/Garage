@@ -3,5 +3,3 @@
 Manager manager = new();
 
 manager.Run();
-
-//Testing
