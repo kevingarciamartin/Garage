@@ -156,38 +156,52 @@ namespace Garage
 
         private bool GetGarageMenuCommand(Garage<Vehicle> currentGarage)
         {
+                bool inGarage = true;
                 var keyPressed = ConsoleUI.GetKey();
 
                 switch (keyPressed)
                 {
                     case ConsoleKey.D1:
                         currentGarage.PrintParkedVehicles();
-                        return true;
+                        return inGarage;
                     case ConsoleKey.D2:
                         currentGarage.PrintVehicleTypes();
-                        return true;
+                        return inGarage;
                     case ConsoleKey.D3:
                         if (!CheckIfFull(currentGarage))
                         {
                             var (vehicleType, registrationNumber, color, numberOfWheels) = GetVehicleInput(currentGarage);
-                            AddVehicle(currentGarage, vehicleType, registrationNumber, color, numberOfWheels);
+                            if (AddVehicle(currentGarage, vehicleType, registrationNumber, color, numberOfWheels))
+                            {
+                                Console.ForegroundColor = ConsoleColor.Green;
+
+                                Console.Write("A");
+                                if (VehicleTypes.AllTypesStartingWithVowel.Contains(vehicleType))
+                                    Console.Write("n");
+                                Console.WriteLine($" {vehicleType.ToLower()} has been added to the garage.");
+                                Console.WriteLine();
+
+                                Console.ResetColor();
                         }
-                        return true;
+                    }
+                        return inGarage;
                     case ConsoleKey.D4:
-                        //Todo: Remove a vehicle from the garage
+                        //Todo: Remove a specific vehicle from the garage
                         RemoveVehicle(currentGarage);
-                        return true;
+                        return inGarage;
                     case ConsoleKey.D5:
+                        //Todo: Fix null reference
                         SearchVehicleByRegistrationNumber(currentGarage);
-                        return true;
+                        return inGarage;
                     case ConsoleKey.D6:
+                        //Todo: Fix null reference
                         SearchVehiclesByCharacteristics(currentGarage);
-                        return true;
+                        return inGarage;
                     case ConsoleKey.D0:
-                        return false;
+                        return inGarage = false;
                     default:
                         ConsoleUI.ErrorMessage("Please enter a valid input.");
-                        return true;
+                        return inGarage;
                 }
         }
 
@@ -334,9 +348,6 @@ namespace Garage
 
         private static (string, string, string, int) GetVehicleInput(Garage<Vehicle> currentGarage)
         {
-            //Todo: Fix method
-            //bool isSuccessful = false;
-
             //Todo: Validate inputs
             var vehicleType = GetVehicleType(currentGarage);
             var registrationNumber = ConsoleUI.AskForString("Enter a unique registration number (e.g. 'ABC123'):");
@@ -344,22 +355,6 @@ namespace Garage
             var numberOfWheels = ConsoleUI.AskForPositiveInt("Enter the amount of wheels of the vehicle:");
 
             return (vehicleType, registrationNumber, color, numberOfWheels);
-
-            //if (isSuccessful)
-            //{
-            //    Console.ForegroundColor = ConsoleColor.Green;
-
-            //    Console.Write("A");
-            //    if (VehicleTypes.AllTypesStartingWithVowel.Contains(vehicleType))
-            //        Console.Write("n");
-            //    Console.WriteLine($" {vehicleType.ToLower()} has been added to the garage.");
-            //    Console.WriteLine();
-
-            //    Console.ResetColor();
-            //}
-
-            //return isSuccessful;
-
         }
 
         private bool RemoveVehicle(Garage<Vehicle> currentGarage)
