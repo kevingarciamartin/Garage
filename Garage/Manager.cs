@@ -338,7 +338,11 @@ namespace Garage
 
             var registrationNumber = ConsoleUI.AskForString("Enter the registration number you would like to search for:");
 
-            var searchedVehicle = currentGarage.Where(v => string.Equals(v.RegistrationNumber.ToLower(), registrationNumber.ToLower()));
+            var searchedVehicle = currentGarage.Where(v =>
+            {
+                return v != null && string.Equals(v.RegistrationNumber.ToLower(), registrationNumber.ToLower());//);
+
+            });
 
             if (!searchedVehicle.Any())
             {

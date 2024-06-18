@@ -107,7 +107,8 @@ namespace Garage
         {
             foreach (var vehicle in _vehicles)
             {
-                yield return vehicle;
+                if (vehicle != null)
+                    yield return vehicle;
             }
         }
 
