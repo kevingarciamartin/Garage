@@ -142,7 +142,7 @@ namespace Garage
             return vehicleType;
         }
 
-        private void PrintGarageMenu(Garage<Vehicle> currentGarage)
+        private static void PrintGarageMenu(Garage<Vehicle> currentGarage)
         {
             bool inGarage = true;
 
@@ -154,7 +154,7 @@ namespace Garage
             } while (inGarage);
         }
 
-        private bool GetGarageMenuCommand(Garage<Vehicle> currentGarage)
+        private static bool GetGarageMenuCommand(Garage<Vehicle> currentGarage)
         {
                 bool inGarage = true;
                 var keyPressed = ConsoleUI.GetKey();
