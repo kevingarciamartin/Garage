@@ -23,7 +23,8 @@ namespace Garage
         {
             WriteLine("Main Menu"
                 + "\n1. Create a new garage."
-                + "\n2. Change garage."
+                + "\n2. Delete a garage."
+                + "\n3. Select a garage."
                 + "\n0. Exit the application.");
         }
 

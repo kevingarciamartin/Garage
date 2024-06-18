@@ -33,7 +33,10 @@ namespace Garage
                     CreateGarage();
                     break;
                 case ConsoleKey.D2:
-                    ChangeGarage();
+                    DeleteGarage();
+                    break;
+                case ConsoleKey.D3:
+                    SelectGarage();
                     break;
                 case ConsoleKey.D0:
                     ConfirmExitCommand();
@@ -44,7 +47,76 @@ namespace Garage
             }
         }
 
-        private void ChangeGarage()
+        private void DeleteGarage()
+        {
+            if (_garageHandler.IsEmpty)
+            {
+                ConsoleUI.WriteLine("No garage exists.");
+            }
+            else
+            {
+                Console.WriteLine("Select a garage to delete:");
+                _garageHandler.Print();
+
+                var keyPressed = ConsoleUI.GetKey();
+
+                switch (keyPressed)
+                {
+                    case ConsoleKey.D1:
+                        _garageHandler.Garages.Remove(_garageHandler.Garages[0]);
+                        break;
+                    case ConsoleKey.D2:
+                        if (_garageHandler.Count < 2)
+                        {
+                            ConsoleUI.ErrorMessage("Please enter a valid input");
+                            break;
+                        }
+                        else
+                        {
+                            _garageHandler.Garages.Remove(_garageHandler.Garages[1]);
+                            break;
+                        }
+                    case ConsoleKey.D3:
+                        if (_garageHandler.Count < 3)
+                        {
+                            ConsoleUI.ErrorMessage("Please enter a valid input");
+                            break;
+                        }
+                        else
+                        {
+                            _garageHandler.Garages.Remove(_garageHandler.Garages[2]);
+                            break;
+                        } 
+                    case ConsoleKey.D4:
+                        if (_garageHandler.Count < 4)
+                        {
+                            ConsoleUI.ErrorMessage("Please enter a valid input");
+                            break;
+                        }
+                        else
+                        {
+                            _garageHandler.Garages.Remove(_garageHandler.Garages[3]);
+                            break;
+                        }
+                    case ConsoleKey.D5:
+                        if (_garageHandler.Count < 5)
+                        {
+                            ConsoleUI.ErrorMessage("Please enter a valid input");
+                            break;
+                        }
+                        else
+                        {
+                            _garageHandler.Garages.Remove(_garageHandler.Garages[4]);
+                            break;
+                        }
+                    default:
+                        ConsoleUI.ErrorMessage("Please enter a valid input.");
+                        break;
+                }
+            }
+        }
+
+        private void SelectGarage()
         {
             if (_garageHandler.IsEmpty)
             {
@@ -117,21 +189,27 @@ namespace Garage
                         break;
                 }
             }
-
         }
 
         private void CreateGarage()
         {
-            var garageName = ConsoleUI.AskForString("Enter a name for the garage:");
-            var garageCapacity = ConsoleUI.AskForPositiveNonZeroInt("Enter a maximum capacity:");
+            if (_garageHandler.IsFull)
+            {
+                ConsoleUI.WriteLine("You have reached the maximum capacity of garages.");
+            }
+            else
+            {
+                var garageName = ConsoleUI.AskForString("Enter a name for the garage:");
+                var garageCapacity = ConsoleUI.AskForPositiveNonZeroInt("Enter a maximum capacity:");
 
-            _garageHandler.Add(garageName, garageCapacity);
+                _garageHandler.Add(garageName, garageCapacity);
 
-            var currentGarage = _garageHandler.Garages.LastOrDefault(g => g != null);
+                var currentGarage = _garageHandler.Garages.LastOrDefault(g => g != null);
 
-            OptionToPopulateGarage(currentGarage!);
+                OptionToPopulateGarage(currentGarage!);
 
-            PrintGarageMenu(currentGarage!);
+                PrintGarageMenu(currentGarage!);
+            }
         }
 
         private static void OptionToPopulateGarage(Garage<Vehicle> currentGarage)
