@@ -1,5 +1,7 @@
 ﻿using Garage.Vehicles;
+using Garage.Vehicles.Properties;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 
 namespace Garage
 {
@@ -48,10 +50,99 @@ namespace Garage
 
             var currentGarage = _garageHandler.Garages.LastOrDefault(g => g != null);
 
+            OptionToPopulateGarage(currentGarage!);
+
             PrintGarageMenu(currentGarage!);
         }
 
-        private void PrintGarageMenu(Garage<Vehicles.Vehicle> currentGarage)
+        private void OptionToPopulateGarage(Garage<Vehicle> currentGarage)
+        {
+            ConsoleUI.WriteLine("If you would like to pre-populate the garage, enter the amount of vehicles you want." 
+                              + "\nIf not, enter 0.");
+
+            var input = ConsoleUI.AskForPositiveInt("Enter the number of vehicles to pre-populate the garage:");
+
+            if (input > 0)
+            {
+                Random rnd = new();
+
+                for (int i = 0; i < input; i++)
+                {
+                    var vehicleType = GetRandomVehicleType(rnd);
+                    var registrationNumber = GenerateRegistrationNumber(rnd);
+                    var color = GetRandomColor(rnd);
+                    var numberOfWheels = GetRandomNumberOfWheels(rnd, vehicleType);
+
+                    AddVehicle(currentGarage, vehicleType, registrationNumber, color, numberOfWheels);
+                }
+            }
+        }
+
+        private int GetRandomNumberOfWheels(Random rnd, string vehicleType)
+        {
+            int numberOfWheels;
+
+            switch (vehicleType)
+            {
+                case VehicleTypes.Airplane: return 3;
+                case VehicleTypes.Boat: return 0;
+                case VehicleTypes.Bus: 
+                    numberOfWheels = rnd.Next(4, 9);
+
+                    if (Int32.IsOddInteger(numberOfWheels))
+                        return numberOfWheels - 1;
+
+                    return numberOfWheels;
+                case VehicleTypes.Car: return 4;
+                case VehicleTypes.Motorcycle: return rnd.Next(2, 4);
+                default: return 0;
+            }
+        }
+
+        private string GenerateRegistrationNumber(Random rnd)
+        {
+            const int registrationNumberLength = 6;
+            string[] registrationNumberArray = new string[registrationNumberLength];
+            string letter;
+            string integer;
+
+            for (int i = 0; i < registrationNumberLength / 2; i++)
+            {
+                // Generates random uppercase letter (A-Z)
+                int num = rnd.Next(26);
+                letter = ((char)('A' + num)).ToString();
+
+                registrationNumberArray[i] = letter;
+            }
+
+            for (int i = registrationNumberLength / 2; i < registrationNumberLength; i++)
+            {
+                // Generates random integer (0-9)
+                integer = (rnd.Next(10)).ToString();
+
+                registrationNumberArray[i] = integer;
+            }
+
+            return String.Join("", registrationNumberArray);
+        }
+
+        private string GetRandomColor(Random rnd)
+        {
+            var index = rnd.Next(Colors.AllColors.Length);
+            var color = Colors.AllColors[index];
+
+            return color;
+        }
+
+        private string GetRandomVehicleType(Random rnd)
+        {
+            var index = rnd.Next(VehicleTypes.AllTypes.Length);
+            var vehicleType = VehicleTypes.AllTypes[index];
+
+            return vehicleType;
+        }
+
+        private void PrintGarageMenu(Garage<Vehicle> currentGarage)
         {
             bool inGarage = true;
 
@@ -63,7 +154,7 @@ namespace Garage
             } while (inGarage);
         }
 
-        private bool GetGarageMenuCommand(Garage<Vehicles.Vehicle> currentGarage)
+        private bool GetGarageMenuCommand(Garage<Vehicle> currentGarage)
         {
                 var keyPressed = ConsoleUI.GetKey();
 
@@ -76,7 +167,11 @@ namespace Garage
                         currentGarage.PrintVehicleTypes();
                         return true;
                     case ConsoleKey.D3:
-                        AddVehicle(currentGarage);
+                        if (!CheckIfFull(currentGarage))
+                        {
+                            var (vehicleType, registrationNumber, color, numberOfWheels) = GetVehicleInput(currentGarage);
+                            AddVehicle(currentGarage, vehicleType, registrationNumber, color, numberOfWheels);
+                        }
                         return true;
                     case ConsoleKey.D4:
                         //Todo: Remove a vehicle from the garage
@@ -94,6 +189,43 @@ namespace Garage
                         ConsoleUI.ErrorMessage("Please enter a valid input.");
                         return true;
                 }
+        }
+
+        private static bool CheckIfFull(Garage<Vehicle> currentGarage)
+        {
+            if (currentGarage.IsFull)
+                ConsoleUI.WriteLine("The garage is full.");
+
+            return currentGarage.IsFull;
+        }
+
+        private static bool AddVehicle(Garage<Vehicle> currentGarage, string vehicleType, string registrationNumber, string color, int numberOfWheels)
+        {
+            bool isSuccessful = false;
+
+            switch (vehicleType)
+            {
+                case VehicleTypes.Airplane:
+                    isSuccessful = currentGarage.Add(new Airplane(registrationNumber, color, numberOfWheels));
+                    break;
+                case VehicleTypes.Boat:
+                    isSuccessful = currentGarage.Add(new Boat(registrationNumber, color, numberOfWheels));
+                    break;
+                case VehicleTypes.Bus:
+                    isSuccessful = currentGarage.Add(new Bus(registrationNumber, color, numberOfWheels));
+                    break;
+                case VehicleTypes.Car:
+                    isSuccessful = currentGarage.Add(new Car(registrationNumber, color, numberOfWheels));
+                    break;
+                case VehicleTypes.Motorcycle:
+                    isSuccessful = currentGarage.Add(new Motorcycle(registrationNumber, color, numberOfWheels));
+                    break;
+                default:
+                    ConsoleUI.ErrorMessage($"Vehicle type {vehicleType} does not exist.");
+                    break;
+            }
+
+            return isSuccessful;
         }
 
         private bool SearchVehiclesByCharacteristics(Garage<Vehicle> currentGarage)
@@ -200,60 +332,34 @@ namespace Garage
             return isSuccessful = true;
         }
 
-        private static bool AddVehicle(Garage<Vehicle> currentGarage)
+        private static (string, string, string, int) GetVehicleInput(Garage<Vehicle> currentGarage)
         {
-            bool isSuccessful = false;
+            //Todo: Fix method
+            //bool isSuccessful = false;
 
-            if (currentGarage.IsFull)
-            {
-                ConsoleUI.WriteLine("The garage is full.");
-                return isSuccessful;
-            }
-            else
-            {
-                //Todo: Validate inputs
-                var vehicleType = GetVehicleType(currentGarage) ?? "car";
-                var registrationNumber = ConsoleUI.AskForString("Enter a unique registration number (e.g. 'ABC123'):");
-                var color = ConsoleUI.AskForString("Enter a vehicle color:");
-                var numberOfWheels = ConsoleUI.AskForPositiveInt("Enter the amount of wheels of the vehicle:");
+            //Todo: Validate inputs
+            var vehicleType = GetVehicleType(currentGarage);
+            var registrationNumber = ConsoleUI.AskForString("Enter a unique registration number (e.g. 'ABC123'):");
+            var color = ConsoleUI.AskForString("Enter a vehicle color:");
+            var numberOfWheels = ConsoleUI.AskForPositiveInt("Enter the amount of wheels of the vehicle:");
 
-                switch (vehicleType)
-                {
-                    case VehicleTypes.Airplane:
-                        isSuccessful = currentGarage.Add(new Airplane(registrationNumber, color, numberOfWheels));
-                        break;
-                    case VehicleTypes.Boat:
-                        isSuccessful = currentGarage.Add(new Boat(registrationNumber, color, numberOfWheels));
-                        break;
-                    case VehicleTypes.Bus:
-                        isSuccessful = currentGarage.Add(new Bus(registrationNumber, color, numberOfWheels));
-                        break;
-                    case VehicleTypes.Car:
-                        isSuccessful = currentGarage.Add(new Car(registrationNumber, color, numberOfWheels));
-                        break;
-                    case VehicleTypes.Motorcycle:
-                        isSuccessful = currentGarage.Add(new Motorcycle(registrationNumber, color, numberOfWheels));
-                        break;
-                    default:
-                        ConsoleUI.ErrorMessage($"Vehicle type {vehicleType} does not exist.");
-                        break;
-                }
+            return (vehicleType, registrationNumber, color, numberOfWheels);
 
-                if (isSuccessful)
-                {
-                    Console.ForegroundColor = ConsoleColor.Green;
+            //if (isSuccessful)
+            //{
+            //    Console.ForegroundColor = ConsoleColor.Green;
 
-                    Console.Write("A");
-                    if (VehicleTypes.AllTypesStartingWithVowel.Contains(vehicleType))
-                        Console.Write("n");
-                    Console.WriteLine($" {vehicleType.ToLower()} has been added to the garage.");
-                    Console.WriteLine();
+            //    Console.Write("A");
+            //    if (VehicleTypes.AllTypesStartingWithVowel.Contains(vehicleType))
+            //        Console.Write("n");
+            //    Console.WriteLine($" {vehicleType.ToLower()} has been added to the garage.");
+            //    Console.WriteLine();
 
-                    Console.ResetColor();
-                }
+            //    Console.ResetColor();
+            //}
 
-                return isSuccessful;
-            }
+            //return isSuccessful;
+
         }
 
         private bool RemoveVehicle(Garage<Vehicle> currentGarage)
