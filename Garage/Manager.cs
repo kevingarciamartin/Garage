@@ -32,6 +32,9 @@ namespace Garage
                 case ConsoleKey.D1:
                     CreateGarage();
                     break;
+                case ConsoleKey.D2:
+                    ChangeGarage();
+                    break;
                 case ConsoleKey.D0:
                     ConfirmExitCommand();
                     break;
@@ -39,6 +42,82 @@ namespace Garage
                     ConsoleUI.ErrorMessage("Please enter a valid input.");
                     break;
             }
+        }
+
+        private void ChangeGarage()
+        {
+            if (_garageHandler.IsEmpty)
+            {
+                ConsoleUI.WriteLine("No garage exists.");
+            }
+            else
+            {
+                Console.WriteLine("Select a garage:");
+                _garageHandler.Print();
+
+                var keyPressed = ConsoleUI.GetKey();
+                Garage<Vehicle> currentGarage;
+
+                switch (keyPressed)
+                {
+                    case ConsoleKey.D1:
+                        currentGarage = _garageHandler.Garages[0];
+                        PrintGarageMenu(currentGarage);
+                        break;
+                    case ConsoleKey.D2:
+                        if (_garageHandler.Count < 2)
+                        {
+                            ConsoleUI.ErrorMessage("Please enter a valid input");
+                            break;
+                        }
+                        else
+                        {
+                            currentGarage = _garageHandler.Garages[1];
+                            PrintGarageMenu(currentGarage); 
+                            break;
+                        }
+                    case ConsoleKey.D3:
+                        if (_garageHandler.Count < 3)
+                        {
+                            ConsoleUI.ErrorMessage("Please enter a valid input");
+                            break;
+                        }
+                        else
+                        {
+                            currentGarage = _garageHandler.Garages[2];
+                            PrintGarageMenu(currentGarage);
+                            break;
+                        } 
+                    case ConsoleKey.D4:
+                        if (_garageHandler.Count < 4)
+                        {
+                            ConsoleUI.ErrorMessage("Please enter a valid input");
+                            break;
+                        }
+                        else
+                        {
+                            currentGarage = _garageHandler.Garages[3];
+                            PrintGarageMenu(currentGarage);
+                            break;
+                        }
+                    case ConsoleKey.D5:
+                        if (_garageHandler.Count < 5)
+                        {
+                            ConsoleUI.ErrorMessage("Please enter a valid input");
+                            break;
+                        }
+                        else
+                        {
+                            currentGarage = _garageHandler.Garages[4];
+                            PrintGarageMenu(currentGarage);
+                            break;
+                        }
+                    default:
+                        ConsoleUI.ErrorMessage("Please enter a valid input.");
+                        break;
+                }
+            }
+
         }
 
         private void CreateGarage()
