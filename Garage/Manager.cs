@@ -175,11 +175,9 @@ namespace Garage
                         RemoveVehicle(currentGarage);
                         return inGarage;
                     case ConsoleKey.D5:
-                        //Todo: Fix null reference
                         SearchVehicleByRegistrationNumber(currentGarage);
                         return inGarage;
                     case ConsoleKey.D6:
-                        //Todo: Fix null reference
                         SearchVehiclesByCharacteristics(currentGarage);
                         return inGarage;
                     case ConsoleKey.D0:
