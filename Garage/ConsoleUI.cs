@@ -22,13 +22,14 @@ namespace Garage
         internal static void PrintMainMenu()
         {
             WriteLine("Main Menu"
-                + "\n1. Create a garage."
+                + "\n1. Create a new garage."
+                + "\n2. Change garage."
                 + "\n0. Exit the application.");
         }
 
         private static void PrintGarageMenuTitle(string garageName)
         {
-            Console.WriteLine($"Garage {garageName} Menu");
+            Console.WriteLine($"Garage '{garageName}'s Menu");
         }
 
         internal static void PrintGarageMenu(string garageName)
