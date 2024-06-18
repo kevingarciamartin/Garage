@@ -55,7 +55,7 @@ namespace Garage
             PrintGarageMenu(currentGarage!);
         }
 
-        private void OptionToPopulateGarage(Garage<Vehicle> currentGarage)
+        private static void OptionToPopulateGarage(Garage<Vehicle> currentGarage)
         {
             ConsoleUI.WriteLine("If you would like to pre-populate the garage, enter the amount of vehicles you want." 
                               + "\nIf not, enter 0.");
@@ -78,7 +78,7 @@ namespace Garage
             }
         }
 
-        private int GetRandomNumberOfWheels(Random rnd, string vehicleType)
+        private static int GetRandomNumberOfWheels(Random rnd, string vehicleType)
         {
             int numberOfWheels;
 
@@ -99,7 +99,7 @@ namespace Garage
             }
         }
 
-        private string GenerateRegistrationNumber(Random rnd)
+        private static string GenerateRegistrationNumber(Random rnd)
         {
             const int registrationNumberLength = 6;
             string[] registrationNumberArray = new string[registrationNumberLength];
@@ -126,7 +126,7 @@ namespace Garage
             return String.Join("", registrationNumberArray);
         }
 
-        private string GetRandomColor(Random rnd)
+        private static string GetRandomColor(Random rnd)
         {
             var index = rnd.Next(Colors.AllColors.Length);
             var color = Colors.AllColors[index];
@@ -134,7 +134,7 @@ namespace Garage
             return color;
         }
 
-        private string GetRandomVehicleType(Random rnd)
+        private static string GetRandomVehicleType(Random rnd)
         {
             var index = rnd.Next(VehicleTypes.AllTypes.Length);
             var vehicleType = VehicleTypes.AllTypes[index];
@@ -168,22 +168,7 @@ namespace Garage
                         currentGarage.PrintVehicleTypes();
                         return inGarage;
                     case ConsoleKey.D3:
-                        if (!CheckIfFull(currentGarage))
-                        {
-                            var (vehicleType, registrationNumber, color, numberOfWheels) = GetVehicleInput(currentGarage);
-                            if (AddVehicle(currentGarage, vehicleType, registrationNumber, color, numberOfWheels))
-                            {
-                                Console.ForegroundColor = ConsoleColor.Green;
-
-                                Console.Write("A");
-                                if (VehicleTypes.AllTypesStartingWithVowel.Contains(vehicleType))
-                                    Console.Write("n");
-                                Console.WriteLine($" {vehicleType.ToLower()} has been added to the garage.");
-                                Console.WriteLine();
-
-                                Console.ResetColor();
-                        }
-                    }
+                        Add(currentGarage);  
                         return inGarage;
                     case ConsoleKey.D4:
                         //Todo: Remove a specific vehicle from the garage
@@ -203,6 +188,32 @@ namespace Garage
                         ConsoleUI.ErrorMessage("Please enter a valid input.");
                         return inGarage;
                 }
+        }
+
+        private static bool Add(Garage<Vehicle> currentGarage)
+        {
+            bool isSuccessful = false;
+
+            if (!CheckIfFull(currentGarage))
+            {
+                var (vehicleType, registrationNumber, color, numberOfWheels) = GetVehicleInput(currentGarage);
+                if (AddVehicle(currentGarage, vehicleType, registrationNumber, color, numberOfWheels))
+                {
+                    Console.ForegroundColor = ConsoleColor.Green;
+
+                    Console.Write("A");
+                    if (VehicleTypes.AllTypesStartingWithVowel.Contains(vehicleType))
+                        Console.Write("n");
+                    Console.WriteLine($" {vehicleType.ToLower()} has been added to the garage.");
+                    Console.WriteLine();
+
+                    Console.ResetColor();
+
+                    return isSuccessful = true;
+                }
+            }
+
+            return isSuccessful;
         }
 
         private static bool CheckIfFull(Garage<Vehicle> currentGarage)
@@ -242,7 +253,7 @@ namespace Garage
             return isSuccessful;
         }
 
-        private bool SearchVehiclesByCharacteristics(Garage<Vehicle> currentGarage)
+        private static bool SearchVehiclesByCharacteristics(Garage<Vehicle> currentGarage)
         {
             bool isSuccessful = false;
 
@@ -315,7 +326,7 @@ namespace Garage
             return isSuccessful = true;
         }
 
-        private bool SearchVehicleByRegistrationNumber(Garage<Vehicle> currentGarage)
+        private static bool SearchVehicleByRegistrationNumber(Garage<Vehicle> currentGarage)
         {
             bool isSuccessful = false;
 
@@ -357,7 +368,7 @@ namespace Garage
             return (vehicleType, registrationNumber, color, numberOfWheels);
         }
 
-        private bool RemoveVehicle(Garage<Vehicle> currentGarage)
+        private static bool RemoveVehicle(Garage<Vehicle> currentGarage)
         {
             bool isSuccessful = false;
 
