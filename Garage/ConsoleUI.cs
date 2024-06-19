@@ -1,6 +1,7 @@
 ﻿
 
 
+
 namespace Garage
 {
     internal class ConsoleUI
@@ -49,12 +50,20 @@ namespace Garage
         internal static void PrintGetVehicleTypeMenu(string garageName)
         {
             PrintGarageMenuTitle(garageName);
-            WriteLine("Choose a vehicle type."
+            WriteLine("Choose a vehicle type:"
                 + "\n1. Airplane."
                 + "\n2. Boat."
                 + "\n3. Bus."
                 + "\n4. Car."
                 + "\n5. Motorcycle.");
+        }
+
+        internal static void PrintRemoveVehicleMenu(string garageName)
+        {
+            PrintGarageMenuTitle(garageName);
+            WriteLine("Remove"
+                + "\n1. ... the last parked vehicle."
+                + "\n2. ... a specific vehicle.");
         }
 
         internal static void WriteLine(string message)
