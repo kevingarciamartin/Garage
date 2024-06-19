@@ -12,6 +12,11 @@ namespace Garage.Tests.Tests
         private const string validString = "Valid";
         private const string emptyString = "";
         private const string whiteSpaceString = " ";
+        private const string airplaneRegistrationNumber = "ABC123";
+        private const string boatRegistrationNumber = "DEF123";
+        private const string busRegistrationNumber = "GHI123";
+        private const string carRegistrationNumber = "JKL123";
+        private const string motorcycleRegistrationNumber = "MNO123";
         private const int validCapacity = 1;
         private const int invalidCapacity = -1;
         private const int initialCount = 0;
@@ -26,11 +31,11 @@ namespace Garage.Tests.Tests
         public GarageTests()
         {
             _garage = new Garage<Vehicle>(validString, validCapacity);
-            _airplane = new Airplane(registrationNumber: "ABC123", color: "Red", numberOfWheels: 4);
-            _boat = new Boat(registrationNumber: "DEF123", color: "Red", numberOfWheels: 4);
-            _bus = new Bus(registrationNumber: "GHI123", color: "Red", numberOfWheels: 4);
-            _car = new Car(registrationNumber: "JKL123", color: "Red", numberOfWheels: 4);
-            _motorcycle = new Motorcycle(registrationNumber: "MNO123", color: "Red", numberOfWheels: 4);
+            _airplane = new Airplane(registrationNumber: airplaneRegistrationNumber, color: "Red", numberOfWheels: 4);
+            _boat = new Boat(registrationNumber: boatRegistrationNumber, color: "Red", numberOfWheels: 4);
+            _bus = new Bus(registrationNumber: busRegistrationNumber, color: "Red", numberOfWheels: 4);
+            _car = new Car(registrationNumber: carRegistrationNumber, color: "Red", numberOfWheels: 4);
+            _motorcycle = new Motorcycle(registrationNumber: motorcycleRegistrationNumber, color: "Red", numberOfWheels: 4);
         }
 
         [Fact]
@@ -108,7 +113,7 @@ namespace Garage.Tests.Tests
         public void Remove_ShouldReturnFalse_WhenIsEmpty()
         {
             Assert.False(_garage.Remove());
-            Assert.False(_garage.Remove("ABC123"));
+            Assert.False(_garage.Remove(airplaneRegistrationNumber));
         }
 
         [Fact]
@@ -124,7 +129,7 @@ namespace Garage.Tests.Tests
         {
             _garage.Add(_airplane);
 
-            Assert.True(_garage.Remove("ABC123"));
+            Assert.True(_garage.Remove(airplaneRegistrationNumber));
         }
         
         [Fact]
@@ -140,7 +145,7 @@ namespace Garage.Tests.Tests
         {
             _garage.Add(_car);
             
-            Assert.False(_garage.Remove("ABC123"));
+            Assert.False(_garage.Remove(airplaneRegistrationNumber));
         }
 
         [Fact]
@@ -156,7 +161,7 @@ namespace Garage.Tests.Tests
         public void Remove_ByRegistrationNumber_ShouldDecreaseCount_By_1()
         {
             _garage.Add(_airplane);
-            _garage.Remove("ABC123");
+            _garage.Remove(airplaneRegistrationNumber);
 
             Assert.Equal(initialCount, _garage.Count);
         }
@@ -166,9 +171,77 @@ namespace Garage.Tests.Tests
         {
             _garage.Add(_airplane);
             _garage.Add(_boat);
-            _garage.Remove("ABC123");
+            _garage.Remove(airplaneRegistrationNumber);
 
             Assert.Equal(initialCount, _boat.ID);
+        }
+
+        [Fact]
+        public void IsValidRegistrationNumber_ShouldThrowException_OnInvalidRegistrationNumber()
+        {
+            Assert.Throws<ArgumentException>(() => _garage.IsValidRegistrationNumber(emptyString));
+            Assert.Throws<ArgumentException>(() => _garage.IsValidRegistrationNumber(whiteSpaceString));
+            Assert.Throws<ArgumentException>(() => _garage.IsValidRegistrationNumber(null!));
+        }
+        
+        [Fact]
+        public void IsValidRegistrationNumber_ShouldReturnFalse_WhenLengthIsNot_6()
+        {
+            Assert.False(_garage.IsValidRegistrationNumber("ABC"));
+            Assert.False(_garage.IsValidRegistrationNumber("AABBCC112233"));
+        }
+
+        [Fact]
+        public void IsValidRegistrationNumber_ShouldReturnFalse_WhenFirstThreeCharactersAreNotLetters()
+        {
+            Assert.False(_garage.IsValidRegistrationNumber("0BC123"));
+            Assert.False(_garage.IsValidRegistrationNumber("A0C123"));
+            Assert.False(_garage.IsValidRegistrationNumber("AB0123"));
+        }
+        
+        [Fact]
+        public void IsValidRegistrationNumber_ShouldReturnFalse_WhenLastThreeCharactersAreNotIntegers()
+        {
+            Assert.False(_garage.IsValidRegistrationNumber("ABCZ23"));
+            Assert.False(_garage.IsValidRegistrationNumber("ABC1Z3"));
+            Assert.False(_garage.IsValidRegistrationNumber("ABC12Z"));
+        }
+
+        [Fact]
+        public void IsValidRegistrationNumber_ShouldReturnTrue_WhenValid()
+        {
+            Assert.True(_garage.IsValidRegistrationNumber(airplaneRegistrationNumber));
+        }
+
+        [Fact]
+        public void IsUniqueRegistrationNumber_ShouldThrowException_OnInvalidRegistrationNumber()
+        {
+            Assert.Throws<ArgumentException>(() => _garage.IsUniqueRegistrationNumber(emptyString));
+            Assert.Throws<ArgumentException>(() => _garage.IsUniqueRegistrationNumber(whiteSpaceString));
+            Assert.Throws<ArgumentException>(() => _garage.IsUniqueRegistrationNumber(null!));
+        }
+
+        [Fact]
+        public void IsUniqueRegistrationNumber_ShouldReturnFalse_WhenLengthIsNot_6()
+        {
+            Assert.False(_garage.IsUniqueRegistrationNumber("ABC"));
+            Assert.False(_garage.IsUniqueRegistrationNumber("AABBCC112233"));
+        }
+
+        [Fact]
+        public void IsUniqueRegistrationNumber_ShouldReturnFalse_WhenRegistrationNumberExists()
+        {
+            _garage.Add(_airplane);
+
+            Assert.False(_garage.IsUniqueRegistrationNumber(airplaneRegistrationNumber));
+        }
+
+        [Fact]
+        public void IsUniqueRegistrationNumber_ShouldReturnTrue_WhenRegistrationNumberDoesNotExist()
+        {
+            _garage.Add(_car);
+
+            Assert.True(_garage.IsUniqueRegistrationNumber(airplaneRegistrationNumber));
         }
     }
 }
