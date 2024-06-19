@@ -27,10 +27,10 @@ namespace Garage.Tests.Tests
         {
             _garage = new Garage<Vehicle>(validString, validCapacity);
             _airplane = new Airplane(registrationNumber: "ABC123", color: "Red", numberOfWheels: 4);
-            _boat = new Boat(registrationNumber: "ABC123", color: "Red", numberOfWheels: 4);
-            _bus = new Bus(registrationNumber: "ABC123", color: "Red", numberOfWheels: 4);
-            _car = new Car(registrationNumber: "ABC123", color: "Red", numberOfWheels: 4);
-            _motorcycle = new Motorcycle(registrationNumber: "ABC123", color: "Red", numberOfWheels: 4);
+            _boat = new Boat(registrationNumber: "DEF123", color: "Red", numberOfWheels: 4);
+            _bus = new Bus(registrationNumber: "GHI123", color: "Red", numberOfWheels: 4);
+            _car = new Car(registrationNumber: "JKL123", color: "Red", numberOfWheels: 4);
+            _motorcycle = new Motorcycle(registrationNumber: "MNO123", color: "Red", numberOfWheels: 4);
         }
 
         [Fact]
@@ -48,7 +48,7 @@ namespace Garage.Tests.Tests
         {
             Assert.Throws<ArgumentException>(() => new Garage<Vehicle>(emptyString, validCapacity));
             Assert.Throws<ArgumentException>(() => new Garage<Vehicle>(whiteSpaceString, validCapacity));
-            Assert.Throws<ArgumentException>(() => new Garage<Vehicle>(null, validCapacity));
+            Assert.Throws<ArgumentException>(() => new Garage<Vehicle>(null!, validCapacity));
         }
 
         [Fact]
@@ -95,11 +95,20 @@ namespace Garage.Tests.Tests
 
             Assert.Equal(1, _garage.Count);
         }
+        
+        [Fact]
+        public void Add_ShouldSetVehicleID_To_CountMinus1()
+        {
+            _garage.Add(_airplane);
+
+            Assert.Equal(_garage.Count - 1, _airplane.ID);
+        }
 
         [Fact]
         public void Remove_ShouldReturnFalse_WhenIsEmpty()
         {
             Assert.False(_garage.Remove());
+            Assert.False(_garage.Remove("ABC123"));
         }
 
         [Fact]
@@ -109,6 +118,30 @@ namespace Garage.Tests.Tests
 
             Assert.True(_garage.Remove());
         }
+        
+        [Fact]
+        public void Remove_ByRegistrationNumber_ShouldReturnTrue_WhenNotIsEmpty()
+        {
+            _garage.Add(_airplane);
+
+            Assert.True(_garage.Remove("ABC123"));
+        }
+        
+        [Fact]
+        public void Remove_ByRegistrationNumber_ShouldReturnFalse_WhenArgumentIsNullOrWhiteSpace()
+        {
+            Assert.False(_garage.Remove(emptyString));
+            Assert.False(_garage.Remove(whiteSpaceString));
+            Assert.False(_garage.Remove(null!));
+        }
+        
+        [Fact]
+        public void Remove_ByRegistrationNumber_ShouldReturnFalse_WhenVehicleIsNotFound()
+        {
+            _garage.Add(_car);
+            
+            Assert.False(_garage.Remove("ABC123"));
+        }
 
         [Fact]
         public void Remove_ShouldDecreaseCount_By_1()
@@ -117,6 +150,25 @@ namespace Garage.Tests.Tests
             _garage.Remove();
 
             Assert.Equal(initialCount, _garage.Count);
+        }
+        
+        [Fact]
+        public void Remove_ByRegistrationNumber_ShouldDecreaseCount_By_1()
+        {
+            _garage.Add(_airplane);
+            _garage.Remove("ABC123");
+
+            Assert.Equal(initialCount, _garage.Count);
+        }
+        
+        [Fact]
+        public void Remove_ByRegistrationNumber_ShouldDecreaseVehicleID_By_1()
+        {
+            _garage.Add(_airplane);
+            _garage.Add(_boat);
+            _garage.Remove("ABC123");
+
+            Assert.Equal(initialCount, _boat.ID);
         }
     }
 }
