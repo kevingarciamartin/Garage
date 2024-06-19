@@ -120,13 +120,17 @@ namespace Garage
             var index = vehicleToRemove.ID;
             _vehicles[index] = null!;
 
-            for (int i = index; i < Count - 1; i++)
+            for (int i = index; i < Count; i++)
             {
-                _vehicles[i] = _vehicles[i + 1];
-                _vehicles[i].ID = i;
+                if (!(i == Count - 1))
+                {
+                    _vehicles[i] = _vehicles[i + 1];
+                    _vehicles[i].ID = i;
+                }
             }
 
-            _vehicles[Count - 1] = null!;
+            if (Count != 0)
+                _vehicles[Count - 1] = null!;
 
             ConsoleUI.SuccessMessage($"{vehicleToRemove.VehicleType} ({vehicleToRemove.RegistrationNumber}) has been removed.");
 
