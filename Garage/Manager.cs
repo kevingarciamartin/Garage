@@ -226,7 +226,7 @@ namespace Garage
                 for (int i = 0; i < input; i++)
                 {
                     var vehicleType = GetRandomVehicleType(rnd);
-                    var registrationNumber = GenerateRegistrationNumber(rnd);
+                    var registrationNumber = GenerateRegistrationNumber(rnd, currentGarage);
                     var color = GetRandomColor(rnd);
                     var numberOfWheels = GetRandomNumberOfWheels(rnd, vehicleType);
 
@@ -256,31 +256,37 @@ namespace Garage
             }
         }
 
-        private static string GenerateRegistrationNumber(Random rnd)
+        private static string GenerateRegistrationNumber(Random rnd, Garage<Vehicle> currentGarage)
         {
             const int registrationNumberLength = 6;
             string[] registrationNumberArray = new string[registrationNumberLength];
             string letter;
             string integer;
+            string registrationNumber;
 
-            for (int i = 0; i < registrationNumberLength / 2; i++)
+            do
             {
-                // Generates random uppercase letter (A-Z)
-                int num = rnd.Next(26);
-                letter = ((char)('A' + num)).ToString();
+                for (int i = 0; i < registrationNumberLength / 2; i++)
+                {
+                    // Generates random uppercase letter (A-Z)
+                    int num = rnd.Next(26);
+                    letter = ((char)('A' + num)).ToString();
 
-                registrationNumberArray[i] = letter;
-            }
+                    registrationNumberArray[i] = letter;
+                }
 
-            for (int i = registrationNumberLength / 2; i < registrationNumberLength; i++)
-            {
-                // Generates random integer (0-9)
-                integer = (rnd.Next(10)).ToString();
+                for (int i = registrationNumberLength / 2; i < registrationNumberLength; i++)
+                {
+                    // Generates random integer (0-9)
+                    integer = (rnd.Next(10)).ToString();
 
-                registrationNumberArray[i] = integer;
-            }
+                    registrationNumberArray[i] = integer;
+                }
 
-            return String.Join("", registrationNumberArray);
+                registrationNumber = String.Join("", registrationNumberArray);
+            } while (!currentGarage.IsUniqueRegistrationNumber(registrationNumber));
+
+            return registrationNumber;
         }
 
         private static string GetRandomColor(Random rnd)
@@ -515,11 +521,16 @@ namespace Garage
         {
             //Todo: Validate inputs
             var vehicleType = GetVehicleType(currentGarage);
-            var registrationNumber = ConsoleUI.AskForString("Enter a unique registration number (e.g. 'ABC123'):");
+            string registrationNumber;
+            do
+            {
+                registrationNumber = ConsoleUI.AskForString("Enter a unique registration number (e.g. 'ABC123'):");
+            } while (!currentGarage.IsValidRegistrationNumber(registrationNumber) 
+                  && !currentGarage.IsUniqueRegistrationNumber(registrationNumber));
             var color = ConsoleUI.AskForString("Enter a vehicle color:");
             var numberOfWheels = ConsoleUI.AskForPositiveInt("Enter the amount of wheels of the vehicle:");
 
-            return (vehicleType, registrationNumber, color, numberOfWheels);
+            return (vehicleType, registrationNumber.ToUpper(), color, numberOfWheels);
         }
 
         private static bool Remove(Garage<Vehicle> currentGarage)

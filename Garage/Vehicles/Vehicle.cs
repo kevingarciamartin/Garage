@@ -4,7 +4,6 @@
     {
         public Vehicle(string registrationNumber, string color, int numberOfWheels)
         {
-            //Todo: Validate registration number
             RegistrationNumber = registrationNumber;
             Color = color;
             NumberOfWheels = numberOfWheels;
