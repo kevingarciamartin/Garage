@@ -427,12 +427,15 @@ namespace Garage
             
             Console.Write("Vehicle type: ");
             var searchedVehicleType = Console.ReadLine();
+            searchedVehicleType = searchedVehicleType?.Trim();
             
             Console.Write("Vehicle color: ");
             var searchedVehicleColor = Console.ReadLine();
+            searchedVehicleColor = searchedVehicleColor?.Trim();
 
             Console.Write("Number of wheels: ");
             var numberOfWheelsInput = Console.ReadLine();
+            numberOfWheelsInput = numberOfWheelsInput?.Trim();
             Console.WriteLine();
 
             IEnumerable<Vehicle> searchedVehicles = null!;
@@ -441,7 +444,7 @@ namespace Garage
                 searchedVehicles = currentGarage.Where(v => string.Equals(v.VehicleType.ToLower(), searchedVehicleType.ToLower()));
 
             if (!string.IsNullOrWhiteSpace(searchedVehicleColor))
-                searchedVehicles = currentGarage.Where(v => string.Equals(v.Color.ToLower(), searchedVehicleColor.ToLower()));
+                searchedVehicles = currentGarage.Where(v => Colors.GetLevenshteinDistance(v.Color, searchedVehicleColor) <= 2);
 
             if (Int32.TryParse(numberOfWheelsInput, out int searchedNumberOfWheels))
                 searchedVehicles = currentGarage.Where(v => Int32.Equals(v.NumberOfWheels, searchedNumberOfWheels));
@@ -474,11 +477,11 @@ namespace Garage
             }
             else
             {
+                Console.WriteLine(Print.VehiclePropertyTitles);
                 foreach (var vehicle in searchedVehicles)
                 {
                     vehicle?.Print();
                 }
-
                 Console.WriteLine();
             }
 
@@ -496,6 +499,7 @@ namespace Garage
             }
 
             var registrationNumber = ConsoleUI.AskForString("Enter the registration number you would like to search for:");
+            registrationNumber = registrationNumber.Trim();
 
             var searchedVehicle = currentGarage.Where(v => string.Equals(v.RegistrationNumber.ToLower(), registrationNumber.ToLower()));
 
@@ -506,6 +510,7 @@ namespace Garage
             }
             else
             {
+                Console.WriteLine(Print.VehiclePropertyTitles);
                 foreach (var vehicle in searchedVehicle)
                 {
                     vehicle.Print();
