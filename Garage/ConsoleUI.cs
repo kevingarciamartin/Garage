@@ -72,10 +72,24 @@ namespace Garage
             Console.WriteLine();
         }
 
+        internal static void ErrorMessage(Action action)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            action?.Invoke();
+            Console.ResetColor();
+        }
+        
         internal static void ErrorMessage(string message)
         {
             Console.ForegroundColor = ConsoleColor.Red;
             WriteLine(message);
+            Console.ResetColor();
+        }
+        
+        internal static void SuccessMessage(Action action)
+        {
+            Console.ForegroundColor = ConsoleColor.Green;
+            action?.Invoke();
             Console.ResetColor();
         }
         

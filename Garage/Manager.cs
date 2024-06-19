@@ -359,15 +359,14 @@ namespace Garage
                 var (vehicleType, registrationNumber, color, numberOfWheels) = GetVehicleInput(currentGarage);
                 if (AddVehicle(currentGarage, vehicleType, registrationNumber, color, numberOfWheels))
                 {
-                    Console.ForegroundColor = ConsoleColor.Green;
-
-                    Console.Write("A");
-                    if (VehicleTypes.AllTypesStartingWithVowel.Contains(vehicleType))
-                        Console.Write("n");
-                    Console.WriteLine($" {vehicleType.ToLower()} has been added to the garage.");
-                    Console.WriteLine();
-
-                    Console.ResetColor();
+                    ConsoleUI.SuccessMessage(() =>
+                    {
+                        Console.Write("A");
+                        if (VehicleTypes.AllTypesStartingWithVowel.Contains(vehicleType))
+                            Console.Write("n");
+                        Console.WriteLine($" {vehicleType.ToLower()} has been added to the garage.");
+                        Console.WriteLine();
+                    });
 
                     return isSuccessful = true;
                 }
@@ -455,22 +454,22 @@ namespace Garage
             }
             else if (!searchedVehicles.Any())
             {
-                ConsoleUI.ErrorMessage("There exist no vehicles with the following characteristics;");
+                ConsoleUI.ErrorMessage(() =>
+                {
+                    ConsoleUI.WriteLine("There exist no vehicles with the following characteristics;");
+                    
+                    if (!string.IsNullOrWhiteSpace(searchedVehicleType))
+                        Console.WriteLine($"Vehicle type: {searchedVehicleType}");
+
+                    if (!string.IsNullOrWhiteSpace(searchedVehicleColor))
+                        Console.WriteLine($"Vehicle color: {searchedVehicleColor}");
+
+                    if (!string.IsNullOrWhiteSpace(numberOfWheelsInput))
+                        Console.WriteLine($"Number of wheels: {numberOfWheelsInput}");
+                    
+                    Console.WriteLine();
+                });
                 
-                Console.ForegroundColor = ConsoleColor.Red;
-                
-                if (!string.IsNullOrWhiteSpace(searchedVehicleType))
-                    Console.WriteLine($"Vehicle type: {searchedVehicleType}");
-
-                if (!string.IsNullOrWhiteSpace(searchedVehicleColor))
-                    Console.WriteLine($"Vehicle color: {searchedVehicleColor}");
-
-                if (!string.IsNullOrWhiteSpace(numberOfWheelsInput))
-                    Console.WriteLine($"Number of wheels: {numberOfWheelsInput}");
-
-                Console.ResetColor();
-                Console.WriteLine();
-
                 return isSuccessful;
             }
             else
@@ -525,11 +524,10 @@ namespace Garage
             do
             {
                 registrationNumber = ConsoleUI.AskForString("Enter a unique registration number (e.g. 'ABC123'):");
-            } while (!currentGarage.IsValidRegistrationNumber(registrationNumber) 
-                  && !currentGarage.IsUniqueRegistrationNumber(registrationNumber));
+            } while (!currentGarage.IsUniqueRegistrationNumber(registrationNumber));
             var color = ConsoleUI.AskForString("Enter a vehicle color:");
             var numberOfWheels = ConsoleUI.AskForPositiveInt("Enter the amount of wheels of the vehicle:");
-
+            ConsoleUI.er
             return (vehicleType, registrationNumber.ToUpper(), color, numberOfWheels);
         }
 
