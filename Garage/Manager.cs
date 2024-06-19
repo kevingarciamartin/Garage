@@ -518,7 +518,6 @@ namespace Garage
 
         private static (string, string, string, int) GetVehicleInput(Garage<Vehicle> currentGarage)
         {
-            //Todo: Validate inputs
             string registrationNumber;
             string color;
             int[] levenshteinDistance = new int[Colors.AllColors.Length];
