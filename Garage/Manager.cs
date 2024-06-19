@@ -328,7 +328,6 @@ namespace Garage
                         Add(currentGarage);  
                         return inGarage;
                     case ConsoleKey.D4:
-                        //Todo: Remove a specific vehicle from the garage
                         Remove(currentGarage);
                         return inGarage;
                     case ConsoleKey.D5:
