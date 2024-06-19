@@ -88,8 +88,6 @@ namespace Garage
 
             if (IsFull) return false;
 
-            if (!IsValidRegistrationNumber(vehicle.RegistrationNumber)) return false;
-
             if (!IsUniqueRegistrationNumber(vehicle.RegistrationNumber)) return false;
 
             vehicle.ID = Count;
@@ -100,16 +98,8 @@ namespace Garage
 
         public bool IsUniqueRegistrationNumber(string registrationNumber)
         {
-            if (string.IsNullOrWhiteSpace(registrationNumber))
-            {
-                throw new ArgumentException($"'{nameof(registrationNumber)}' cannot be null or whitespace.", nameof(registrationNumber));
-            }
-
-            if (registrationNumber.Length != 6)
-            {
-                ConsoleUI.ErrorMessage("The registration number is either too short or too long.");
+            if (!Vehicle.IsValidRegistrationNumber(registrationNumber))
                 return false;
-            }
 
             var vehicle = _vehicles.Where(v => v != null && v.RegistrationNumber.Equals(registrationNumber, StringComparison.CurrentCultureIgnoreCase));
 
@@ -123,41 +113,6 @@ namespace Garage
                 return true;
             }
                 
-        }
-
-        public bool IsValidRegistrationNumber(string registrationNumber)
-        {
-            if (string.IsNullOrWhiteSpace(registrationNumber))
-            {
-                throw new ArgumentException($"'{nameof(registrationNumber)}' cannot be null or whitespace.", nameof(registrationNumber));
-            }
-
-            if (registrationNumber.Length != 6)
-            {
-                ConsoleUI.ErrorMessage("The registration number is either too short or too long.");
-                return false;
-            }
-
-            var registrationNumberArray = registrationNumber.ToCharArray();
-            int letters = 0;
-            int integers = 0;
-
-            for (int i = 0; i < registrationNumber.Length; i++)
-            {
-                if (i < registrationNumber.Length / 2)
-                {
-                    if (Char.IsLetter(registrationNumberArray[i]))
-                        letters++;
-                }
-                else
-                {
-                    if (Char.IsDigit(registrationNumberArray[i]))
-                        integers++;
-                }
-            }
-
-            if (letters == 3 && integers == 3) return true;
-            else return false;
         }
 
         public bool Remove()
