@@ -10,6 +10,7 @@
             NumberOfWheels = numberOfWheels;
         }
 
+        public int ID { get; set; }
         public string RegistrationNumber { get; }
         public string Color { get; }
         public int NumberOfWheels { get; }
