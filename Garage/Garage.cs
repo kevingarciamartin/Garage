@@ -38,7 +38,7 @@ namespace Garage
                 ConsoleUI.WriteLine("The garage is empty.");
             else
             {
-                Console.WriteLine("List of parked vehicles:");
+                Console.WriteLine(Print.VehiclePropertyTitles);
                 foreach (var vehicle in _vehicles)
                 {
                     vehicle?.Print();

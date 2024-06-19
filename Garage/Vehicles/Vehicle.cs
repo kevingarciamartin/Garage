@@ -17,10 +17,10 @@
 
         public string Print()
         {
-            var message = $"{VehicleType}, "
-                        + $"regNr: {RegistrationNumber}, "
-                        + $"color: {Color}, "
-                        + $"nrOfWheels: {NumberOfWheels}";
+            var message = $"{VehicleType, Properties.Print.VehicleTypeSpace}"
+                        + $"{RegistrationNumber, Properties.Print.RegistrationNumberSpace}"
+                        + $"{Color, Properties.Print.ColorSpace}"
+                        + $"{NumberOfWheels, Properties.Print.NumberOfWheelsSpace}";
 
             Console.WriteLine(message);
 
