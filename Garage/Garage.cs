@@ -88,7 +88,8 @@ namespace Garage
 
             if (IsFull) return false;
 
-            _vehicles[Count] = vehicle; 
+            vehicle.ID = Count;
+            _vehicles[Count] = vehicle;
             
             return true;
         }
@@ -97,8 +98,36 @@ namespace Garage
         {
             if (IsEmpty) return false;
 
-            //Todo: Remove vehicle from array
             _vehicles[Count - 1] = null!;
+
+            return true;
+        }
+
+        public bool Remove(string registrationNumber)
+        {
+            if (IsEmpty) return false;
+
+            if (String.IsNullOrWhiteSpace(registrationNumber)) return false;
+
+            var vehicleToRemove = _vehicles.FirstOrDefault(v => v.RegistrationNumber.Equals(registrationNumber, StringComparison.CurrentCultureIgnoreCase));
+
+            if (vehicleToRemove == null)
+            {
+                ConsoleUI.ErrorMessage($"Could not find a vehicle with registration number {registrationNumber.ToUpper()}");
+                return false;
+            }
+
+            var index = vehicleToRemove.ID;
+            _vehicles[index] = null!;
+
+            for (int i = index; i < Count - 1; i++)
+            {
+                _vehicles[i] = _vehicles[i + 1];
+            }
+
+            _vehicles[Count - 1] = null!;
+
+            ConsoleUI.SuccessMessage($"{vehicleToRemove.VehicleType} ({vehicleToRemove.RegistrationNumber}) has been removed.");
 
             return true;
         }
@@ -113,6 +142,5 @@ namespace Garage
         }
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
-
     }
 }

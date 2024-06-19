@@ -329,7 +329,7 @@ namespace Garage
                         return inGarage;
                     case ConsoleKey.D4:
                         //Todo: Remove a specific vehicle from the garage
-                        RemoveVehicle(currentGarage);
+                        Remove(currentGarage);
                         return inGarage;
                     case ConsoleKey.D5:
                         SearchVehicleByRegistrationNumber(currentGarage);
@@ -523,7 +523,7 @@ namespace Garage
             return (vehicleType, registrationNumber, color, numberOfWheels);
         }
 
-        private static bool RemoveVehicle(Garage<Vehicle> currentGarage)
+        private static bool Remove(Garage<Vehicle> currentGarage)
         {
             bool isSuccessful = false;
 
@@ -534,9 +534,21 @@ namespace Garage
             }
             else
             {
-                isSuccessful = currentGarage.Remove();
+                ConsoleUI.PrintRemoveVehicleMenu(currentGarage.Name);
 
-                return isSuccessful;
+                var keyPressed = ConsoleUI.GetKey();
+
+                switch (keyPressed)
+                {
+                    case ConsoleKey.D1:
+                        return isSuccessful = currentGarage.Remove();
+                    case ConsoleKey.D2:
+                        var registrationNumber = ConsoleUI.AskForString("Enter the registration number of the vehicle you want removed:");
+                        return isSuccessful = currentGarage.Remove(registrationNumber);
+                    default:
+                        ConsoleUI.ErrorMessage("Please enter a valid input.");
+                        return isSuccessful;
+                }
             }
         }
 
