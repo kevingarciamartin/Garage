@@ -177,43 +177,6 @@ namespace Garage.Tests.Tests
         }
 
         [Fact]
-        public void IsValidRegistrationNumber_ShouldThrowException_OnInvalidRegistrationNumber()
-        {
-            Assert.Throws<ArgumentException>(() => _garage.IsValidRegistrationNumber(emptyString));
-            Assert.Throws<ArgumentException>(() => _garage.IsValidRegistrationNumber(whiteSpaceString));
-            Assert.Throws<ArgumentException>(() => _garage.IsValidRegistrationNumber(null!));
-        }
-        
-        [Fact]
-        public void IsValidRegistrationNumber_ShouldReturnFalse_WhenLengthIsNot_6()
-        {
-            Assert.False(_garage.IsValidRegistrationNumber("ABC"));
-            Assert.False(_garage.IsValidRegistrationNumber("AABBCC112233"));
-        }
-
-        [Fact]
-        public void IsValidRegistrationNumber_ShouldReturnFalse_WhenFirstThreeCharactersAreNotLetters()
-        {
-            Assert.False(_garage.IsValidRegistrationNumber("0BC123"));
-            Assert.False(_garage.IsValidRegistrationNumber("A0C123"));
-            Assert.False(_garage.IsValidRegistrationNumber("AB0123"));
-        }
-        
-        [Fact]
-        public void IsValidRegistrationNumber_ShouldReturnFalse_WhenLastThreeCharactersAreNotIntegers()
-        {
-            Assert.False(_garage.IsValidRegistrationNumber("ABCZ23"));
-            Assert.False(_garage.IsValidRegistrationNumber("ABC1Z3"));
-            Assert.False(_garage.IsValidRegistrationNumber("ABC12Z"));
-        }
-
-        [Fact]
-        public void IsValidRegistrationNumber_ShouldReturnTrue_WhenValid()
-        {
-            Assert.True(_garage.IsValidRegistrationNumber(airplaneRegistrationNumber));
-        }
-
-        [Fact]
         public void IsUniqueRegistrationNumber_ShouldThrowException_OnInvalidRegistrationNumber()
         {
             Assert.Throws<ArgumentException>(() => _garage.IsUniqueRegistrationNumber(emptyString));
@@ -226,6 +189,22 @@ namespace Garage.Tests.Tests
         {
             Assert.False(_garage.IsUniqueRegistrationNumber("ABC"));
             Assert.False(_garage.IsUniqueRegistrationNumber("AABBCC112233"));
+        }
+
+        [Fact]
+        public void IsUniqueRegistrationNumber_ShouldReturnFalse_WhenFirstThreeCharactersAreNotLetters()
+        {
+            Assert.False(_garage.IsUniqueRegistrationNumber("0BC123"));
+            Assert.False(_garage.IsUniqueRegistrationNumber("A0C123"));
+            Assert.False(_garage.IsUniqueRegistrationNumber("AB0123"));
+        }
+
+        [Fact]
+        public void IsUniqueRegistrationNumber_ShouldReturnFalse_WhenLastThreeCharactersAreNotIntegers()
+        {
+            Assert.False(_garage.IsUniqueRegistrationNumber("ABCZ23"));
+            Assert.False(_garage.IsUniqueRegistrationNumber("ABC1Z3"));
+            Assert.False(_garage.IsUniqueRegistrationNumber("ABC12Z"));
         }
 
         [Fact]
