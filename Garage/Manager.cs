@@ -519,13 +519,33 @@ namespace Garage
         private static (string, string, string, int) GetVehicleInput(Garage<Vehicle> currentGarage)
         {
             //Todo: Validate inputs
-            var vehicleType = GetVehicleType(currentGarage);
             string registrationNumber;
+            string color;
+            int[] levenshteinDistance = new int[Colors.AllColors.Length];
+
+            var vehicleType = GetVehicleType(currentGarage);
+
             do
             {
                 registrationNumber = ConsoleUI.AskForString("Enter a unique registration number (e.g. 'ABC123'):");
             } while (!currentGarage.IsUniqueRegistrationNumber(registrationNumber));
-            var color = ConsoleUI.AskForString("Enter a vehicle color:");
+
+            do
+            {
+                color = ConsoleUI.AskForString("Enter a vehicle color:");
+
+                for (int i = 0; i < Colors.AllColors.Length; i++)
+                {
+                    levenshteinDistance[i] = Colors.GetLevenshteinDistance(color, Colors.AllColors[i]);
+
+                    if (levenshteinDistance[i] <= 2)
+                        color = Colors.AllColors[i];
+                }
+
+                if (levenshteinDistance.Min() > 2)
+                    ConsoleUI.ErrorMessage("Enter a valid color.");
+            } while (levenshteinDistance.Min() > 2);
+
             var numberOfWheels = ConsoleUI.AskForPositiveInt("Enter the amount of wheels of the vehicle:");
 
             return (vehicleType, registrationNumber.ToUpper(), color, numberOfWheels);
