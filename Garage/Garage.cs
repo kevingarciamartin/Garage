@@ -113,7 +113,7 @@ namespace Garage
 
             if (vehicleToRemove == null)
             {
-                ConsoleUI.ErrorMessage($"Could not find a vehicle with registration number {registrationNumber.ToUpper()}");
+                ConsoleUI.ErrorMessage($"Could not find a vehicle with registration number '{registrationNumber.ToUpper()}'.");
                 return false;
             }
 
@@ -123,6 +123,7 @@ namespace Garage
             for (int i = index; i < Count - 1; i++)
             {
                 _vehicles[i] = _vehicles[i + 1];
+                _vehicles[i].ID = i;
             }
 
             _vehicles[Count - 1] = null!;
