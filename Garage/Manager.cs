@@ -527,7 +527,7 @@ namespace Garage
             } while (!currentGarage.IsUniqueRegistrationNumber(registrationNumber));
             var color = ConsoleUI.AskForString("Enter a vehicle color:");
             var numberOfWheels = ConsoleUI.AskForPositiveInt("Enter the amount of wheels of the vehicle:");
-            ConsoleUI.er
+
             return (vehicleType, registrationNumber.ToUpper(), color, numberOfWheels);
         }
 
