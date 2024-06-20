@@ -7,7 +7,14 @@ namespace Garage
 {
     internal class Manager
     {
-        private GarageHandler _garageHandler = new();
+        private IConsoleUI _ui;
+        private IHandler _garageHandler;
+
+        public Manager(IConsoleUI ui, IHandler garageHandler)
+        {
+            _ui = ui;
+            _garageHandler = garageHandler;
+        }
 
         internal void Run()
         {
@@ -19,13 +26,13 @@ namespace Garage
 
         private void PrintMainMenu()
         {
-            ConsoleUI.PrintMainMenu();
+            _ui.PrintMainMenu();
             GetMainMenuCommand();
         }
 
         private void GetMainMenuCommand()
         {
-            var keyPressed = ConsoleUI.GetKey();
+            var keyPressed = _ui.GetKey();
 
             switch (keyPressed)
             {
@@ -42,7 +49,7 @@ namespace Garage
                     ConfirmExitCommand();
                     break;
                 default:
-                    ConsoleUI.ErrorMessage("Please enter a valid input.");
+                    _ui.ErrorMessage(() => _ui.WriteLine("Please enter a valid input."));
                     break;
             }
         }
@@ -51,14 +58,14 @@ namespace Garage
         {
             if (_garageHandler.IsEmpty)
             {
-                ConsoleUI.WriteLine("No garage exists.");
+                _ui.WriteLine("No garage exists.");
             }
             else
             {
                 Console.WriteLine("Select a garage to delete:");
                 _garageHandler.Print();
 
-                var keyPressed = ConsoleUI.GetKey();
+                var keyPressed = _ui.GetKey();
 
                 switch (keyPressed)
                 {
@@ -68,7 +75,7 @@ namespace Garage
                     case ConsoleKey.D2:
                         if (_garageHandler.Count < 2)
                         {
-                            ConsoleUI.ErrorMessage("Please enter a valid input");
+                            _ui.ErrorMessage(() => _ui.WriteLine("Please enter a valid input"));
                             break;
                         }
                         else
@@ -79,7 +86,7 @@ namespace Garage
                     case ConsoleKey.D3:
                         if (_garageHandler.Count < 3)
                         {
-                            ConsoleUI.ErrorMessage("Please enter a valid input");
+                            _ui.ErrorMessage(() => _ui.WriteLine("Please enter a valid input"));
                             break;
                         }
                         else
@@ -90,7 +97,7 @@ namespace Garage
                     case ConsoleKey.D4:
                         if (_garageHandler.Count < 4)
                         {
-                            ConsoleUI.ErrorMessage("Please enter a valid input");
+                            _ui.ErrorMessage(() => _ui.WriteLine("Please enter a valid input"));
                             break;
                         }
                         else
@@ -101,7 +108,7 @@ namespace Garage
                     case ConsoleKey.D5:
                         if (_garageHandler.Count < 5)
                         {
-                            ConsoleUI.ErrorMessage("Please enter a valid input");
+                            _ui.ErrorMessage(() => _ui.WriteLine("Please enter a valid input"));
                             break;
                         }
                         else
@@ -110,7 +117,7 @@ namespace Garage
                             break;
                         }
                     default:
-                        ConsoleUI.ErrorMessage("Please enter a valid input.");
+                        _ui.ErrorMessage(() => _ui.WriteLine("Please enter a valid input."));
                         break;
                 }
             }
@@ -120,14 +127,14 @@ namespace Garage
         {
             if (_garageHandler.IsEmpty)
             {
-                ConsoleUI.WriteLine("No garage exists.");
+                _ui.WriteLine("No garage exists.");
             }
             else
             {
                 Console.WriteLine("Select a garage:");
                 _garageHandler.Print();
 
-                var keyPressed = ConsoleUI.GetKey();
+                var keyPressed = _ui.GetKey();
                 Garage<Vehicle> currentGarage;
 
                 switch (keyPressed)
@@ -139,7 +146,7 @@ namespace Garage
                     case ConsoleKey.D2:
                         if (_garageHandler.Count < 2)
                         {
-                            ConsoleUI.ErrorMessage("Please enter a valid input");
+                            _ui.ErrorMessage(() => _ui.WriteLine("Please enter a valid input"));
                             break;
                         }
                         else
@@ -151,7 +158,7 @@ namespace Garage
                     case ConsoleKey.D3:
                         if (_garageHandler.Count < 3)
                         {
-                            ConsoleUI.ErrorMessage("Please enter a valid input");
+                            _ui.ErrorMessage(() => _ui.WriteLine("Please enter a valid input"));
                             break;
                         }
                         else
@@ -163,7 +170,7 @@ namespace Garage
                     case ConsoleKey.D4:
                         if (_garageHandler.Count < 4)
                         {
-                            ConsoleUI.ErrorMessage("Please enter a valid input");
+                            _ui.ErrorMessage(() => _ui.WriteLine("Please enter a valid input"));
                             break;
                         }
                         else
@@ -175,7 +182,7 @@ namespace Garage
                     case ConsoleKey.D5:
                         if (_garageHandler.Count < 5)
                         {
-                            ConsoleUI.ErrorMessage("Please enter a valid input");
+                            _ui.ErrorMessage(() => _ui.WriteLine("Please enter a valid input"));
                             break;
                         }
                         else
@@ -185,7 +192,7 @@ namespace Garage
                             break;
                         }
                     default:
-                        ConsoleUI.ErrorMessage("Please enter a valid input.");
+                        _ui.ErrorMessage(() => _ui.WriteLine("Please enter a valid input."));
                         break;
                 }
             }
@@ -195,12 +202,12 @@ namespace Garage
         {
             if (_garageHandler.IsFull)
             {
-                ConsoleUI.WriteLine("You have reached the maximum capacity of garages.");
+                _ui.WriteLine("You have reached the maximum capacity of garages.");
             }
             else
             {
-                var garageName = ConsoleUI.AskForString("Enter a name for the garage:");
-                var garageCapacity = ConsoleUI.AskForPositiveNonZeroInt("Enter a maximum capacity:");
+                var garageName = _ui.AskForString("Enter a name for the garage:");
+                var garageCapacity = _ui.AskForPositiveNonZeroInt("Enter a maximum capacity:");
 
                 _garageHandler.Add(garageName, garageCapacity);
 
@@ -212,12 +219,12 @@ namespace Garage
             }
         }
 
-        private static void OptionToPopulateGarage(Garage<Vehicle> currentGarage)
+        private void OptionToPopulateGarage(Garage<Vehicle> currentGarage)
         {
-            ConsoleUI.WriteLine("If you would like to pre-populate the garage, enter the amount of vehicles you want." 
+            _ui.WriteLine("If you would like to pre-populate the garage, enter the amount of vehicles you want." 
                               + "\nIf not, enter 0.");
 
-            var input = ConsoleUI.AskForPositiveInt("Enter the number of vehicles to pre-populate the garage:");
+            var input = _ui.AskForPositiveInt("Enter the number of vehicles to pre-populate the garage:");
 
             if (input > 0)
             {
@@ -305,22 +312,22 @@ namespace Garage
             return vehicleType;
         }
 
-        private static void PrintGarageMenu(Garage<Vehicle> currentGarage)
+        private void PrintGarageMenu(Garage<Vehicle> currentGarage)
         {
             bool inGarage = true;
 
             do
             {
-                ConsoleUI.PrintGarageMenu(currentGarage.Name);
+                _ui.PrintGarageMenu(currentGarage.Name);
                 inGarage = GetGarageMenuCommand(currentGarage);
 
             } while (inGarage);
         }
 
-        private static bool GetGarageMenuCommand(Garage<Vehicle> currentGarage)
+        private bool GetGarageMenuCommand(Garage<Vehicle> currentGarage)
         {
                 bool inGarage = true;
-                var keyPressed = ConsoleUI.GetKey();
+                var keyPressed = _ui.GetKey();
 
                 switch (keyPressed)
                 {
@@ -345,12 +352,12 @@ namespace Garage
                     case ConsoleKey.D0:
                         return inGarage = false;
                     default:
-                        ConsoleUI.ErrorMessage("Please enter a valid input.");
+                        _ui.ErrorMessage(() => _ui.WriteLine("Please enter a valid input."));
                         return inGarage;
                 }
         }
 
-        private static bool Add(Garage<Vehicle> currentGarage)
+        private bool Add(Garage<Vehicle> currentGarage)
         {
             bool isSuccessful = false;
 
@@ -359,7 +366,7 @@ namespace Garage
                 var (vehicleType, registrationNumber, color, numberOfWheels) = GetVehicleInput(currentGarage);
                 if (AddVehicle(currentGarage, vehicleType, registrationNumber, color, numberOfWheels))
                 {
-                    ConsoleUI.SuccessMessage(() =>
+                    _ui.SuccessMessage(() =>
                     {
                         Console.Write("A");
                         if (VehicleTypes.AllTypesStartingWithVowel.Contains(vehicleType))
@@ -375,15 +382,15 @@ namespace Garage
             return isSuccessful;
         }
 
-        private static bool CheckIfFull(Garage<Vehicle> currentGarage)
+        private bool CheckIfFull(Garage<Vehicle> currentGarage)
         {
             if (currentGarage.IsFull)
-                ConsoleUI.WriteLine("The garage is full.");
+                _ui.WriteLine("The garage is full.");
 
             return currentGarage.IsFull;
         }
 
-        private static bool AddVehicle(Garage<Vehicle> currentGarage, string vehicleType, string registrationNumber, string color, int numberOfWheels)
+        private bool AddVehicle(Garage<Vehicle> currentGarage, string vehicleType, string registrationNumber, string color, int numberOfWheels)
         {
             bool isSuccessful = false;
 
@@ -405,24 +412,24 @@ namespace Garage
                     isSuccessful = currentGarage.Add(new Motorcycle(registrationNumber, color, numberOfWheels));
                     break;
                 default:
-                    ConsoleUI.ErrorMessage($"Vehicle type {vehicleType} does not exist.");
+                    _ui.ErrorMessage(() => _ui.WriteLine($"Vehicle type {vehicleType} does not exist."));
                     break;
             }
 
             return isSuccessful;
         }
 
-        private static bool SearchVehiclesByCharacteristics(Garage<Vehicle> currentGarage)
+        private bool SearchVehiclesByCharacteristics(Garage<Vehicle> currentGarage)
         {
             bool isSuccessful = false;
 
             if (currentGarage.IsEmpty)
             {
-                ConsoleUI.WriteLine("The garage is empty.");
+                _ui.WriteLine("The garage is empty.");
                 return isSuccessful;
             }
 
-            ConsoleUI.WriteLine("Enter the characteristics you would like to search for. "
+            _ui.WriteLine("Enter the characteristics you would like to search for. "
                               + "\nLeave empty if you don't want to search for that specific characteristic.");
             
             Console.Write("Vehicle type: ");
@@ -451,15 +458,15 @@ namespace Garage
             
             if (searchedVehicles == null)
             {
-                ConsoleUI.ErrorMessage("No search keywords have been entered.");
+                _ui.ErrorMessage(() => _ui.WriteLine("No search keywords have been entered."));
 
                 return isSuccessful;
             }
             else if (!searchedVehicles.Any())
             {
-                ConsoleUI.ErrorMessage(() =>
+                _ui.ErrorMessage(() =>
                 {
-                    ConsoleUI.WriteLine("There exist no vehicles with the following characteristics;");
+                    _ui.WriteLine("There exist no vehicles with the following characteristics;");
                     
                     if (!string.IsNullOrWhiteSpace(searchedVehicleType))
                         Console.WriteLine($"Vehicle type: {searchedVehicleType}");
@@ -488,24 +495,24 @@ namespace Garage
             return isSuccessful = true;
         }
 
-        private static bool SearchVehicleByRegistrationNumber(Garage<Vehicle> currentGarage)
+        private bool SearchVehicleByRegistrationNumber(Garage<Vehicle> currentGarage)
         {
             bool isSuccessful = false;
 
             if (currentGarage.IsEmpty)
             {
-                ConsoleUI.WriteLine("The garage is empty.");
+                _ui.WriteLine("The garage is empty.");
                 return isSuccessful;
             }
 
-            var registrationNumber = ConsoleUI.AskForString("Enter the registration number you would like to search for:");
+            var registrationNumber = _ui.AskForString("Enter the registration number you would like to search for:");
             registrationNumber = registrationNumber.Trim();
 
             var searchedVehicle = currentGarage.Where(v => string.Equals(v.RegistrationNumber.ToLower(), registrationNumber.ToLower()));
 
             if (!searchedVehicle.Any())
             {
-                ConsoleUI.ErrorMessage($"A vehicle with registration number '{registrationNumber}' could not be found.");
+                _ui.ErrorMessage(() => _ui.WriteLine($"A vehicle with registration number '{registrationNumber}' could not be found."));
                 return isSuccessful;
             }
             else
@@ -521,7 +528,7 @@ namespace Garage
             return isSuccessful = true;
         }
 
-        private static (string, string, string, int) GetVehicleInput(Garage<Vehicle> currentGarage)
+        private (string, string, string, int) GetVehicleInput(Garage<Vehicle> currentGarage)
         {
             string registrationNumber;
             string color;
@@ -531,12 +538,12 @@ namespace Garage
 
             do
             {
-                registrationNumber = ConsoleUI.AskForString("Enter a unique registration number (e.g. 'ABC123'):");
+                registrationNumber = _ui.AskForString("Enter a unique registration number (e.g. 'ABC123'):");
             } while (!currentGarage.IsUniqueRegistrationNumber(registrationNumber));
 
             do
             {
-                color = ConsoleUI.AskForString("Enter a vehicle color:");
+                color = _ui.AskForString("Enter a vehicle color:");
 
                 for (int i = 0; i < Colors.AllColors.Length; i++)
                 {
@@ -547,52 +554,52 @@ namespace Garage
                 }
 
                 if (levenshteinDistance.Min() > 2)
-                    ConsoleUI.ErrorMessage("Enter a valid color.");
+                    _ui.ErrorMessage(() => _ui.WriteLine("Enter a valid color."));
             } while (levenshteinDistance.Min() > 2);
 
-            var numberOfWheels = ConsoleUI.AskForPositiveInt("Enter the amount of wheels of the vehicle:");
+            var numberOfWheels = _ui.AskForPositiveInt("Enter the amount of wheels of the vehicle:");
 
             return (vehicleType, registrationNumber.ToUpper(), color, numberOfWheels);
         }
 
-        private static bool Remove(Garage<Vehicle> currentGarage)
+        private bool Remove(Garage<Vehicle> currentGarage)
         {
             bool isSuccessful = false;
 
             if (currentGarage.IsEmpty)
             {
-                ConsoleUI.WriteLine("The garage is empty.");
+                _ui.WriteLine("The garage is empty.");
                 return isSuccessful;
             }
             else
             {
-                ConsoleUI.PrintRemoveVehicleMenu(currentGarage.Name);
+                _ui.PrintRemoveVehicleMenu(currentGarage.Name);
 
-                var keyPressed = ConsoleUI.GetKey();
+                var keyPressed = _ui.GetKey();
 
                 switch (keyPressed)
                 {
                     case ConsoleKey.D1:
                         return isSuccessful = currentGarage.Remove();
                     case ConsoleKey.D2:
-                        var registrationNumber = ConsoleUI.AskForString("Enter the registration number of the vehicle you want removed:");
+                        var registrationNumber = _ui.AskForString("Enter the registration number of the vehicle you want removed:");
                         return isSuccessful = currentGarage.Remove(registrationNumber);
                     default:
-                        ConsoleUI.ErrorMessage("Please enter a valid input.");
+                        _ui.ErrorMessage(() => _ui.WriteLine("Please enter a valid input."));
                         return isSuccessful;
                 }
             }
         }
 
-        private static string GetVehicleType(Garage<Vehicles.Vehicle> currentGarage)
+        private string GetVehicleType(Garage<Vehicles.Vehicle> currentGarage)
         {
             string? vehicleType = null;
 
             do
             {
-                ConsoleUI.PrintGetVehicleTypeMenu(currentGarage.Name);
+                _ui.PrintGetVehicleTypeMenu(currentGarage.Name);
 
-                var keyPressed = ConsoleUI.GetKey();
+                var keyPressed = _ui.GetKey();
 
                 switch (keyPressed)
                 {
@@ -612,7 +619,7 @@ namespace Garage
                         vehicleType = VehicleTypes.Motorcycle;
                         break;
                     default:
-                        ConsoleUI.ErrorMessage("Invalid input.");
+                        _ui.ErrorMessage(() => _ui.WriteLine("Invalid input."));
                         break;
                 }
             } while (vehicleType == null);
@@ -620,22 +627,22 @@ namespace Garage
             return vehicleType;
         }
 
-        private static void ConfirmExitCommand()
+        private void ConfirmExitCommand()
         {
-            ConsoleUI.ConfirmExit();
+            _ui.ConfirmExit("application");
 
-            var confirmationKeyPressed = ConsoleUI.GetKey();
+            var confirmationKeyPressed = _ui.GetKey();
 
             switch (confirmationKeyPressed)
             {
                 case ConsoleKey.D1:
-                    ConsoleUI.WriteLine("Application closed.");
+                    _ui.WriteLine("Application closed.");
                     Environment.Exit(0);
                     break;
                 case ConsoleKey.D0:
                     break;
                 default:
-                    ConsoleUI.ErrorMessage("Please enter a valid input.");
+                    _ui.ErrorMessage(() => _ui.WriteLine("Please enter a valid input."));
                     break;
             }
         }

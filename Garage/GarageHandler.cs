@@ -3,10 +3,10 @@ using System.Collections;
 
 namespace Garage
 {
-    internal class GarageHandler
+    internal class GarageHandler : IHandler
     {
-        public List<Garage<Vehicle>> Garages;
-        public static int Capacity => 5;
+        public List<Garage<Vehicle>> Garages { get; }
+        public int Capacity => 5;
         public int Count => Garages.Count;
         public bool IsFull => Count >= Capacity;
         public bool IsEmpty => Count <= 0;

@@ -1,5 +1,5 @@
 ﻿using Garage;
 
-Manager manager = new();
+Manager manager = new(new ConsoleUI(), new GarageHandler());
 
 manager.Run();

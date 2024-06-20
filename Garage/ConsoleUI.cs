@@ -4,16 +4,16 @@
 
 namespace Garage
 {
-    internal class ConsoleUI
+    internal class ConsoleUI : IConsoleUI
     {
 
         internal static void Clear()
         {
             Console.Clear();
         }
-        internal static object GetKey() => Console.ReadKey(intercept: true).Key;
+        internal static ConsoleKey GetKey() => Console.ReadKey(intercept: true).Key;
 
-        internal static void ConfirmExit(string exitable = "application")
+        internal static void ConfirmExit(string exitable)
         {
             WriteLine($"Are you sure you want to exit the {exitable}?"
                 + "\n1. Yes."
@@ -163,6 +163,76 @@ namespace Garage
             } while (input <= 0);
 
             return input;
+        }
+
+        ConsoleKey IConsoleUI.GetKey()
+        {
+            return GetKey();
+        }
+
+        void IConsoleUI.ConfirmExit(string exitable)
+        {
+            ConfirmExit(exitable);
+        }
+
+        void IConsoleUI.PrintMainMenu()
+        {
+            PrintMainMenu();
+        }
+
+        void IConsoleUI.PrintGarageMenuTitle(string garageName)
+        {
+            PrintGarageMenuTitle(garageName);
+        }
+
+        void IConsoleUI.PrintGarageMenu(string garageName)
+        {
+            PrintGarageMenu(garageName);
+        }
+
+        void IConsoleUI.PrintGetVehicleTypeMenu(string garageName)
+        {
+            PrintGetVehicleTypeMenu(garageName);
+        }
+
+        void IConsoleUI.PrintRemoveVehicleMenu(string garageName)
+        {
+            PrintRemoveVehicleMenu(garageName);
+        }
+
+        void IConsoleUI.WriteLine(string message)
+        {
+            WriteLine(message);
+        }
+
+        void IConsoleUI.ErrorMessage(Action action)
+        {
+            ErrorMessage(action);
+        }
+
+        void IConsoleUI.SuccessMessage(Action action)
+        {
+            SuccessMessage(action);
+        }
+
+        string IConsoleUI.AskForString(string prompt)
+        {
+            return AskForString(prompt);
+        }
+
+        int IConsoleUI.AskForInt(string prompt)
+        {
+            return AskForInt(prompt);
+        }
+
+        int IConsoleUI.AskForPositiveInt(string prompt)
+        {
+            return AskForPositiveInt(prompt);
+        }
+
+        int IConsoleUI.AskForPositiveNonZeroInt(string prompt)
+        {
+            return AskForPositiveNonZeroInt(prompt);
         }
     }
 }
